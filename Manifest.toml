@@ -1,0 +1,50 @@
+# This file is machine-generated - editing it directly is not advised
+
+[[Base64]]
+uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
+
+[[CSTParser]]
+deps = ["Tokenize"]
+git-tree-sha1 = "e8166cc32a3bfedc97eda16db428b1faba29ca8e"
+uuid = "00ebfdb7-1f24-5e51-bd34-a7502290713f"
+version = "2.0.0"
+
+[[Distributed]]
+deps = ["Random", "Serialization", "Sockets"]
+uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+
+[[InteractiveUtils]]
+deps = ["Markdown"]
+uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+
+[[JuliaFormatter]]
+deps = ["CSTParser", "Test", "Tokenize"]
+git-tree-sha1 = "a5a91c75f52c64a6059d83ca9550c2c450e5984e"
+uuid = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
+version = "0.2.2"
+
+[[Logging]]
+uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
+
+[[Markdown]]
+deps = ["Base64"]
+uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
+
+[[Random]]
+deps = ["Serialization"]
+uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[[Serialization]]
+uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
+
+[[Sockets]]
+uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
+
+[[Test]]
+deps = ["Distributed", "InteractiveUtils", "Logging", "Random"]
+uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[[Tokenize]]
+git-tree-sha1 = "c3aab236f122445406cf7a6de8af0b794da5a950"
+uuid = "0796e94c-ce3b-5d07-9a54-7f471281c624"
+version = "0.5.7"
