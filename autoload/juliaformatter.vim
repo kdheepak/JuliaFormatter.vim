@@ -18,6 +18,7 @@ endfunction
 function! s:HandleMessage(job, lines, event) abort
     if a:event ==# 'stdout'
         " call s:Echoerr(join(a:lines, "\n"))
+        1,$delete
         call setbufline(s:current_win, 1, a:lines)
     elseif a:event ==# 'stderr'
         if len(a:lines) > 0
@@ -88,7 +89,6 @@ function! JuliaFormatter#Format() abort
     endif
 
     let l:cmd = join([l:binpath, '--startup-file=no', '--project=' . s:root, '-e', ' ''using JuliaFormatter; print(format_text("""' . l:content . '"""))'' '])
-    call s:Echo(cmd)
     if has('nvim')
         let s:job = jobstart(l:cmd, {
                     \ 'on_stdout': function('s:HandleMessage'),
