@@ -1,6 +1,6 @@
 # JuliaFormatter.vim
 
-Plugin for formatting Julia code in (n)vim.
+Plugin for formatting Julia code in (n)vim using [JuliaFormatter.jl](https://github.com/domluna/JuliaFormatter.jl).
 
 ### Install
 
