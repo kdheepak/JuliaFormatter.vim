@@ -18,12 +18,12 @@ endfunction
 function! s:HandleMessage(job, lines, event) abort
     if a:event ==# 'stdout'
         " call s:Echoerr(join(a:lines, "\n"))
+        call setbufline(s:current_win, 1, a:lines)
     elseif a:event ==# 'stderr'
         if len(a:lines) > 0
             call s:Echoerr('JuliaFormatter Error: ' . join(a:lines, "\n"))
         endif
     elseif a:event ==# 'exit'
-        checktime
         call s:Echo('Done')
     endif
 endfunction
@@ -46,12 +46,10 @@ function! s:Setup() abort
     let l:binpath = JuliaFormatter#binaryPath()
 
     let l:cmd = join([l:binpath, '--startup-file=no', '--project=' . s:root, '-e', '"using Pkg; Pkg.build()"'])
+    let s:current_win = winnr()
+
     if has('nvim')
-        let s:job = jobstart(l:cmd, {
-                    \ 'on_stdout': function('s:HandleMessage'),
-                    \ 'on_stderr': function('s:HandleMessage'),
-                    \ 'on_exit': function('s:HandleMessage'),
-                    \ })
+        let s:job = jobstart(l:cmd, {})
         if s:job == 0
             " call s:Echoerr('JuliaFormatter: Invalid arguments!')
             return 0
@@ -62,11 +60,7 @@ function! s:Setup() abort
             return 1
         endif
     elseif has('job')
-        let s:job = job_start(l:cmd, {
-                    \ 'out_cb': function('s:HandleVim'),
-                    \ 'err_cb': function('s:HandleVim'),
-                    \ 'exit_cb': function('s:HandleVim'),
-                    \ })
+        let s:job = job_start(l:cmd, {})
         if job_status(s:job) !=# 'run'
             " call s:Echoerr('JuliaFormatter: job failed to start or died!')
             return 0
@@ -80,7 +74,11 @@ function! s:Setup() abort
 endfunction
 
 
-function! JuliaFormatter#FormatFile(filename) abort
+function! JuliaFormatter#Format() abort
+
+    let l:content = join(getline(1, '$'), '\n')
+    let l:content = substitute(l:content, '"', '\\"', "g")
+    let l:content = substitute(l:content, "'", "\\'", "g")
 
     let l:binpath = JuliaFormatter#binaryPath()
 
@@ -89,7 +87,8 @@ function! JuliaFormatter#FormatFile(filename) abort
         return 0
     endif
 
-    let l:cmd = join([l:binpath, '--startup-file=no', '--project=' . s:root, '-e', '"using JuliaFormatter; format_file(\"' . a:filename . '\")"'])
+    let l:cmd = join([l:binpath, '--startup-file=no', '--project=' . s:root, '-e', ' ''using JuliaFormatter; print(format_text("""' . l:content . '"""))'' '])
+    call s:Echo(cmd)
     if has('nvim')
         let s:job = jobstart(l:cmd, {
                     \ 'on_stdout': function('s:HandleMessage'),
