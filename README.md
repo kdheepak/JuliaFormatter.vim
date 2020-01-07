@@ -29,7 +29,10 @@ Plugin 'kdheepak/JuliaFormatter.vim'
 Open any Julia file, type `:` to open the command prompt and type the following:
 
 ```vim
-:call JuliaFormatter#Format()
+" format full file
+:call JuliaFormatter#Format(0)
+" format last/current selection
+:call JuliaFormatter#Format(1)
 ```
 
 You can remap this to a keyboard shortcut as well.
