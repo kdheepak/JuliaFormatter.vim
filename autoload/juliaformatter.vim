@@ -2,8 +2,13 @@ if get(g:, 'JuliaFormatter_setup')
     finish
 endif
 
+function! s:Wait(mil)
+    let timetowait = a:mil . " m"
+    exe 'sleep '.timetowait
+endfunction
+
 function! s:AddPrefix(message) abort
-    return '[JF] ' . a:message
+    return '[JuliaFormatter] ' . a:message
 endfunction
 
 function! s:Echo(message) abort
@@ -18,12 +23,12 @@ endfunction
 function! s:HandleMessage(job, lines, event) abort
     if a:event ==# 'stdout'
         " call s:Echoerr(join(a:lines, "\n"))
-        1,$delete
+        1,$delete _
         call setbufline(s:current_win, 1, a:lines)
-    elseif a:event ==# 'stderr'
-        if len(a:lines) > 0
-            call s:Echoerr('JuliaFormatter Error: ' . join(a:lines, "\n"))
-        endif
+    " elseif a:event ==# 'stderr'
+        " if len(a:lines) > 0
+            " call s:Echoerr('Error: ' . join(a:lines, "\n"))
+        " endif
     elseif a:event ==# 'exit'
         call s:Echo('Done')
     endif
@@ -94,6 +99,7 @@ function! JuliaFormatter#Format() abort
                     \ 'on_stdout': function('s:HandleMessage'),
                     \ 'on_stderr': function('s:HandleMessage'),
                     \ 'on_exit': function('s:HandleMessage'),
+                    \ 'stdout_buffered': v:true,
                     \ })
         if s:job == 0
             call s:Echoerr('JuliaFormatter: Invalid arguments!')
