@@ -1,4 +1,4 @@
-if get(g:, 'JuliaFormatter_setup')
+if get(g:, 'JuliaFormatter_loaded')
     finish
 endif
 
@@ -25,10 +25,12 @@ endfunction
 " vim execute callback for every line.
 function! s:HandleMessage(job, lines, event) abort
     if a:event ==# 'stdout'
-        call s:Echo(g:line_start)
-        call s:Echo(g:line_end)
+        let l:message = json_decode(join(a:lines))
+        let l:text = get(get(l:message, 'params'), 'text')
         call s:DeleteLines(g:line_start, g:line_end)
-        call s:PutLines(a:lines, g:line_start)
+        call s:PutLines(split(l:text, '\n'), g:line_start)
+    elseif a:event ==# 'stderr'
+        call s:Echo(join(a:lines))
     elseif a:event ==# 'exit'
         call s:Echo('Done')
     endif
@@ -48,50 +50,9 @@ function! JuliaFormatter#binaryPath() abort
     return l:filename
 endfunction
 
-function! s:Setup() abort
-    let l:binpath = JuliaFormatter#binaryPath()
+function! JuliaFormatter#Launch() abort
 
-    let l:cmd = join([l:binpath, '--startup-file=no', '--project=' . s:root, '-e', '"using Pkg; Pkg.build()"'])
-    let s:current_win = winnr()
-
-    if has('nvim')
-        let s:job = jobstart(l:cmd, {})
-        if s:job == 0
-            " call s:Echoerr('JuliaFormatter: Invalid arguments!')
-            return 0
-        elseif s:job == -1
-            " call s:Echoerr('JuliaFormatter: ' . l:binpath .' not executable!')
-            return 0
-        else
-            return 1
-        endif
-    elseif has('job')
-        let s:job = job_start(l:cmd, {})
-        if job_status(s:job) !=# 'run'
-            " call s:Echoerr('JuliaFormatter: job failed to start or died!')
-            return 0
-        else
-            return 1
-        endif
-    else
-        " echoerr 'Not supported: not nvim nor vim with +job.'
-        return 0
-    endif
-endfunction
-
-function! s:get_visual_selection()
-endfunction
-
-" JuliaFormatter#Format formats text and replaces the text in the current buffer
-" It takes a `mode` which either formats the entire buffer text
-" or the text in the visual selection
-"
-" It sets global `line_start` and `line_end` variables
-" It runs `jobstart`/`job_start` on (n)vim
-" It registers callbacks for the output of stdout
-" Deletes lines `line_start`:`line_end`
-" Appends output of stdout
-function! JuliaFormatter#Format(m) abort
+    call s:Echo("Launching stdio server")
 
     let l:binpath = JuliaFormatter#binaryPath()
 
@@ -100,27 +61,12 @@ function! JuliaFormatter#Format(m) abort
         return 0
     endif
 
-    " visual mode == 1
-    if a:m == 1
-        let g:line_start = getpos("'<")[1]
-        let g:line_end = getpos("'>")[1]
-    else
-        " Get all lines in the file
-        let g:line_start =  1
-        let g:line_end = line('$')
-    endif
-    let l:content = getline(g:line_start, g:line_end)
-    let l:content = join(l:content, '\n')
-    let l:content = substitute(l:content, '"', '\\"', "g")
-    let l:content = substitute(l:content, "'", "\\'", "g")
-
-    let l:cmd = join([l:binpath, '--startup-file=no', '--project=' . s:root, '-e', ' ''using JuliaFormatter; print(format_text("""' . l:content . '"""))'' '])
+    let l:cmd = join([l:binpath, '--startup-file=no', '--project=' . s:root, s:root . '/scripts/server.jl'])
     if has('nvim')
         let s:job = jobstart(l:cmd, {
                     \ 'on_stdout': function('s:HandleMessage'),
                     \ 'on_stderr': function('s:HandleMessage'),
                     \ 'on_exit': function('s:HandleMessage'),
-                    \ 'stdout_buffered': v:true,
                     \ })
         if s:job == 0
             call s:Echoerr('JuliaFormatter: Invalid arguments!')
@@ -129,6 +75,7 @@ function! JuliaFormatter#Format(m) abort
             call s:Echoerr('JuliaFormatter: ' . l:binpath .' not executable!')
             return 0
         else
+            let g:JuliaFormatter_loaded = 1
             return 1
         endif
     elseif has('job')
@@ -142,13 +89,55 @@ function! JuliaFormatter#Format(m) abort
             call s:Echoerr('JuliaFormatter: job failed to start or died!')
             return 0
         else
+            let g:JuliaFormatter_loaded = 1
             return 1
         endif
     else
         echoerr 'Not supported: not nvim nor vim with +job.'
         return 0
     endif
-
 endfunction
 
-let g:JuliaFormatter_setup = s:Setup()
+function! JuliaFormatter#Write(message) abort
+    let l:message = a:message . "\n"
+    if has('nvim')
+        " jobsend respond 1 for success.
+        return !jobsend(s:job, l:message)
+    elseif has('channel')
+        return ch_sendraw(s:job, l:message)
+    else
+        echoerr 'Not supported: not nvim nor vim with +channel.'
+    endif
+endfunction
+
+function! JuliaFormatter#Send(method, params) abort
+    let l:params = a:params
+    return JuliaFormatter#Write(json_encode({
+                \ 'method': a:method,
+                \ 'params': l:params,
+                \ }))
+endfunction
+
+function! JuliaFormatter#handleVimLeavePre() abort
+    return JuliaFormatter#Send('quit', {})
+endfunction
+
+" JuliaFormatter#Format
+function! JuliaFormatter#Format(m) abort
+    if !get(g:, 'JuliaFormatter_loaded')
+        call JuliaFormatter#Launch()
+    end
+    " visual mode == 1
+    if a:m == 1
+        let g:line_start = getpos("'<")[1]
+        let g:line_end = getpos("'>")[1]
+    else
+        " Get all lines in the file
+        let g:line_start =  1
+        let g:line_end = line('$')
+    endif
+    let l:content = getline(g:line_start, g:line_end)
+    let l:content = join(l:content, '\n')
+    return JuliaFormatter#Send('format', {'text': l:content})
+
+endfunction
