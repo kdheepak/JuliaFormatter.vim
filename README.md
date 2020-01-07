@@ -35,5 +35,8 @@ Open any Julia file, type `:` to open the command prompt and type the following:
 You can remap this to a keyboard shortcut as well.
 
 ```vim
-nnoremap <localleader>f :call JuliaFormatter#Format()<CR>
+" normal mode mapping
+nnoremap <localleader>f :<C-u>call JuliaFormatter#Format(0)<CR>
+" visual mode mapping
+vnoremap <localleader>f :<C-u>call JuliaFormatter#Format(1)<CR>
 ```

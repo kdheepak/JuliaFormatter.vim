@@ -2,9 +2,12 @@ if get(g:, 'JuliaFormatter_setup')
     finish
 endif
 
-function! s:Wait(mil)
-    let timetowait = a:mil . " m"
-    exe 'sleep '.timetowait
+function! s:PutLines(lines, lineStart)
+    call append(a:lineStart - 1, a:lines)
+endfunction
+
+function! s:DeleteLines(lineFirst, lineLast)
+    silent! exec a:lineFirst . "," . a:lineLast ."d _"
 endfunction
 
 function! s:AddPrefix(message) abort
@@ -22,13 +25,10 @@ endfunction
 " vim execute callback for every line.
 function! s:HandleMessage(job, lines, event) abort
     if a:event ==# 'stdout'
-        " call s:Echoerr(join(a:lines, "\n"))
-        1,$delete _
-        call setbufline(s:current_win, 1, a:lines)
-    " elseif a:event ==# 'stderr'
-        " if len(a:lines) > 0
-            " call s:Echoerr('Error: ' . join(a:lines, "\n"))
-        " endif
+        call s:Echo(g:line_start)
+        call s:Echo(g:line_end)
+        call s:DeleteLines(g:line_start, g:line_end)
+        call s:PutLines(a:lines, g:line_start)
     elseif a:event ==# 'exit'
         call s:Echo('Done')
     endif
@@ -79,10 +79,22 @@ function! s:Setup() abort
     endif
 endfunction
 
+function! s:get_visual_selection()
+endfunction
 
-function! JuliaFormatter#Format() abort
+function! JuliaFormatter#Format(m) abort
 
-    let l:content = join(getline(1, '$'), '\n')
+    " visual mode == 1
+    if a:m == 1
+        let g:line_start = getpos("'<")[1]
+        let g:line_end = getpos("'>")[1]
+    else
+        " Get all lines in the file
+        let g:line_start =  1
+        let g:line_end = line('$')
+    endif
+    let l:content = getline(g:line_start, g:line_end)
+    let l:content = join(l:content, '\n')
     let l:content = substitute(l:content, '"', '\\"', "g")
     let l:content = substitute(l:content, "'", "\\'", "g")
 
