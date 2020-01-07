@@ -82,7 +82,23 @@ endfunction
 function! s:get_visual_selection()
 endfunction
 
+" JuliaFormatter#Format formats text and replaces the text in the current buffer
+" It takes a `mode` which either formats the entire buffer text
+" or the text in the visual selection
+"
+" It sets global `line_start` and `line_end` variables
+" It runs `jobstart`/`job_start` on (n)vim
+" It registers callbacks for the output of stdout
+" Deletes lines `line_start`:`line_end`
+" Appends output of stdout
 function! JuliaFormatter#Format(m) abort
+
+    let l:binpath = JuliaFormatter#binaryPath()
+
+    if executable(l:binpath) != 1
+        call s:Echoerr('JuliaFormatter: binary (' . l:binpath . ') doesn''t exists! Please check installation guide.')
+        return 0
+    endif
 
     " visual mode == 1
     if a:m == 1
@@ -97,13 +113,6 @@ function! JuliaFormatter#Format(m) abort
     let l:content = join(l:content, '\n')
     let l:content = substitute(l:content, '"', '\\"', "g")
     let l:content = substitute(l:content, "'", "\\'", "g")
-
-    let l:binpath = JuliaFormatter#binaryPath()
-
-    if executable(l:binpath) != 1
-        call s:Echoerr('LanguageClient: binary (' . l:binpath . ') doesn''t exists! Please check installation guide.')
-        return 0
-    endif
 
     let l:cmd = join([l:binpath, '--startup-file=no', '--project=' . s:root, '-e', ' ''using JuliaFormatter; print(format_text("""' . l:content . '"""))'' '])
     if has('nvim')
@@ -123,6 +132,7 @@ function! JuliaFormatter#Format(m) abort
             return 1
         endif
     elseif has('job')
+        " FIXME: stdout callback should fire after job finishes
         let s:job = job_start(l:cmd, {
                     \ 'out_cb': function('s:HandleVim'),
                     \ 'err_cb': function('s:HandleVim'),
