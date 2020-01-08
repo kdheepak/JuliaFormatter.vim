@@ -27,9 +27,11 @@ function main()
             write(logfile, text)
             try
                 text = format_text(text)
+                data["status"] = "success"
             catch
                 log("failed")
                 text = text
+                data["status"] = "error"
             end
             write(logfile, "\n---------------------------------------------------------------------\n")
             write(logfile, text)

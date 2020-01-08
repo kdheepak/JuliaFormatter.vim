@@ -26,13 +26,17 @@ endfunction
 function! s:HandleMessage(job, lines, event) abort
     if a:event ==# 'stdout'
         let l:message = json_decode(join(a:lines))
-        let l:text = get(get(l:message, 'params'), 'text')
-        call s:DeleteLines(g:line_start, g:line_end)
-        call s:PutLines(split(l:text, '\n'), g:line_start)
+        if get(l:message, 'status') ==# 'success'
+            let l:text = get(get(l:message, 'params'), 'text')
+            call s:DeleteLines(g:line_start, g:line_end)
+            call s:PutLines(split(l:text, '\n'), g:line_start)
+        elseif get(l:message, 'status') ==# 'error'
+            call s:Echoerr("ERROR: JuliaFormatter.jl could not parse text.")
+        endif
     elseif a:event ==# 'stderr'
-        call s:Echo(join(a:lines))
+        " call s:Echo(join(a:lines))
     elseif a:event ==# 'exit'
-        call s:Echo('Done')
+        " call s:Echo('Done')
     endif
 endfunction
 
@@ -139,5 +143,4 @@ function! JuliaFormatter#Format(m) abort
     let l:content = getline(g:line_start, g:line_end)
     let l:content = join(l:content, '\n')
     return JuliaFormatter#Send('format', {'text': l:content})
-
 endfunction
