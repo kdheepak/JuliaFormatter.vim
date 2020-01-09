@@ -123,7 +123,10 @@ function! JuliaFormatter#Send(method, params) abort
 endfunction
 
 function! JuliaFormatter#handleVimLeavePre() abort
-    return JuliaFormatter#Send('quit', {})
+    try
+        return JuliaFormatter#Send('quit', {})
+    catch
+    endtry
 endfunction
 
 " JuliaFormatter#Format
