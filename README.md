@@ -46,8 +46,8 @@ nnoremap <localleader>jf :<C-u>call JuliaFormatter#Format(0)<CR>
 vnoremap <localleader>jf :<C-u>call JuliaFormatter#Format(1)<CR>
 ```
 
-The vim documentation recommends using `<localleader>` for a filetype plugin, but feel free to use `<leader>` or `<localleader>` for this remap.
-In vim, both `<leader>` and `<localleader>` are set to the `\` key by default.
+The (n)vim documentation recommends using `<localleader>` for a filetype plugin, but feel free to use `<leader>` or `<localleader>` for this remap.
+In (n)vim, both `<leader>` and `<localleader>` are set to the `\` key by default.
 
 ### Troubleshooting
 
