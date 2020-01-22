@@ -30,6 +30,7 @@ function! s:HandleMessage(job, lines, event) abort
             let l:text = get(get(l:message, 'params'), 'text')
             call s:DeleteLines(g:line_start, g:line_end)
             call s:PutLines(l:text, g:line_start)
+            echomsg ""
         elseif get(l:message, 'status') ==# 'error'
             call s:Echoerr("ERROR: JuliaFormatter.jl could not parse text.")
         endif
