@@ -39,9 +39,9 @@ You can remap this to a keyboard shortcut as well.
 
 ```vim
 " normal mode mapping
-nnoremap <localleader>f :<C-u>call JuliaFormatter#Format(0)<CR>
+nnoremap <localleader>jf :<C-u>call JuliaFormatter#Format(0)<CR>
 " visual mode mapping
-vnoremap <localleader>f :<C-u>call JuliaFormatter#Format(1)<CR>
+vnoremap <localleader>jf :<C-u>call JuliaFormatter#Format(1)<CR>
 ```
 
 See [MINRC](./MINRC) for an example of a minimal vimrc file.
