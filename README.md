@@ -51,28 +51,4 @@ In vim, both `<leader>` and `<localleader>` are set to the `\` key by default.
 
 ### Troubleshooting
 
-If after installing JuliaFormatter.vim, you are having trouble getting it to work, try the following minimal vimrc file.
-
-
-```vim
-set nocompatible              " be iMproved, required
-filetype off                  " required
-
-if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
-  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-call plug#begin('~/.local/share/nvim/plugged')
-
-Plug 'kdheepak/JuliaFormatter.vim'
-
-" Initialize plugin system
-call plug#end()
-
-nnoremap <localleader>jf :<C-u>call JuliaFormatter#Format(0)<CR>
-vnoremap <localleader>jf :<C-u>call JuliaFormatter#Format(1)<CR>
-```
-
-Save the above to a file `MINRC`, and run `vim -u MINRC tests/test.jl` and try hitting `\jf` in normal or visual mode.
+See [`MINRC`](./tests/MINRC) before opening an issue.
