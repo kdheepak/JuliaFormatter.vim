@@ -4,11 +4,9 @@ using   Pkg
 const depsjl_path = joinpath( @__DIR__, "..","deps","deps.jl")
 
 if !isfile(depsjl_path)
-
-
-
-
-    error("Package not installed properly, run Pkg.build(\"Package\"), restart Julia and try again",)
+error(
+      "Package not installed properly, run Pkg.build(\"Package\"), restart Julia and try again",
+     )
 end
 include(depsjl_path)
 
@@ -22,22 +20,6 @@ end
 include(joinpath("..", "deps", "build.jl"))
 
 const MaybeFloat64 = Union{Float64, Nothing }
-
-function foo(
-    x ::Union{Nothing,Vector{UInt}} = nothing,
-    y:: Union{Nothing,UInt64} = nothing;
-    z :: Bool = true,
-    a::AbstractString="John Doe",
-    b::Integer= 12345,
-    c::AbstractString ="XYZ\n\nABC",
-)
-
-    for i in 1:b
-
-        println( x[i] )
-    end
-
-end
 
     function foo(
         x ::Union{Nothing,Vector{UInt}} = nothing,
