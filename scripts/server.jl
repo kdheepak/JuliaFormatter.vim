@@ -15,13 +15,13 @@ function main()
 
     server_state = "start"
     while server_state != "quit"
-        output = ""
         text = readavailable(stdin)
         data = JSON.parse(String(text))
         if data["method"] == "exit"
             server_state = "quit"
         elseif data["method"] == "format"
             text = data["params"]["text"]
+            output = text
             indent = typemax(Int64)
             for line in text
                 if length(line) > 0
@@ -42,7 +42,7 @@ function main()
                 data["status"] = "success"
             catch
                 log("failed")
-                output = text
+                output = join(text, "\n")
                 data["status"] = "error"
             end
             log("\n---------------------------------------------------------------------\n")
@@ -50,6 +50,7 @@ function main()
             data["params"]["text"] =
                 [rstrip(lpad(l, length(l) + indent)) for l in split(output, "\n")]
             print(stdout, JSON.json(data))
+            log("Done.")
         end
     end
 
