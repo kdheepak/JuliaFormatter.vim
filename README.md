@@ -46,4 +46,7 @@ nnoremap <localleader>jf :<C-u>call JuliaFormatter#Format(0)<CR>
 vnoremap <localleader>jf :<C-u>call JuliaFormatter#Format(1)<CR>
 ```
 
+The vim documentation recommends using `<localleader>` for a filetype plugin, but feel free to use `<leader>` or `<localleader>` for this remap.
+In vim, both `<leader>` and `<localleader>` are set to the BackSlash key by default `\`.
+
 See [MINRC](./MINRC) for an example of a minimal vimrc file.
