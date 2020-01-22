@@ -43,3 +43,5 @@ nnoremap <localleader>f :<C-u>call JuliaFormatter#Format(0)<CR>
 " visual mode mapping
 vnoremap <localleader>f :<C-u>call JuliaFormatter#Format(1)<CR>
 ```
+
+See [MINRC](./MINRC) for an example of a minimal vimrc file.
