@@ -11,7 +11,6 @@ function log(msg; spacer = " ")
     flush(logfile)
 end
 
-
 function main()
 
     server_state = "start"
