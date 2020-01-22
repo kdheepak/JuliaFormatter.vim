@@ -29,7 +29,7 @@ function! s:HandleMessage(job, lines, event) abort
         if get(l:message, 'status') ==# 'success'
             let l:text = get(get(l:message, 'params'), 'text')
             call s:DeleteLines(g:line_start, g:line_end)
-            call s:PutLines(split(l:text, '\n'), g:line_start)
+            call s:PutLines(l:text, g:line_start)
         elseif get(l:message, 'status') ==# 'error'
             call s:Echoerr("ERROR: JuliaFormatter.jl could not parse text.")
         endif
@@ -144,6 +144,5 @@ function! JuliaFormatter#Format(m) abort
         let g:line_end = line('$')
     endif
     let l:content = getline(g:line_start, g:line_end)
-    let l:content = join(l:content, '\n')
     return JuliaFormatter#Send('format', {'text': l:content})
 endfunction

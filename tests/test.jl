@@ -29,7 +29,7 @@ function foo(
     z :: Bool = true,
     a::AbstractString="John Doe",
     b::Integer= 12345,
-    c::AbstractString ="XYZ",
+    c::AbstractString ="XYZ\n\nABC",
 )
 
     for i in 1:b
@@ -38,3 +38,19 @@ function foo(
     end
 
 end
+
+    function foo(
+        x ::Union{Nothing,Vector{UInt}} = nothing,
+        y:: Union{Nothing,UInt64} = nothing;
+        z :: Bool = true,
+        a::AbstractString="John Doe",
+        b::Integer= 12345,
+        c::AbstractString ="XYZ\n\nABC",
+    )
+
+        for i in 1:b
+
+            println( x[i] )
+        end
+
+    end
