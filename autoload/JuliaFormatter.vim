@@ -56,7 +56,7 @@ endfunction
 
 function! JuliaFormatter#Launch() abort
 
-    call s:Echo("Launching stdio server")
+    call s:Echo("Launching stdio server ...")
 
     let l:binpath = JuliaFormatter#binaryPath()
 
