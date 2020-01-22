@@ -26,7 +26,7 @@ call dein#add('kdheepak/JuliaFormatter.vim')
 Plugin 'kdheepak/JuliaFormatter.vim'
 ```
 
-### Run JuliaFormatter
+### Usage
 
 Open any Julia file, type `:` to open the command prompt and type the following:
 
@@ -47,6 +47,32 @@ vnoremap <localleader>jf :<C-u>call JuliaFormatter#Format(1)<CR>
 ```
 
 The vim documentation recommends using `<localleader>` for a filetype plugin, but feel free to use `<leader>` or `<localleader>` for this remap.
-In vim, both `<leader>` and `<localleader>` are set to the BackSlash key by default `\`.
+In vim, both `<leader>` and `<localleader>` are set to the `\` key by default.
 
-See [MINRC](./MINRC) for an example of a minimal vimrc file.
+### Troubleshooting
+
+If after installing JuliaFormatter.vim, you are having trouble getting it to work, try the following minimal vimrc file.
+
+
+```vim
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
+  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.local/share/nvim/plugged')
+
+Plug 'kdheepak/JuliaFormatter.vim'
+
+" Initialize plugin system
+call plug#end()
+
+nnoremap <localleader>jf :<C-u>call JuliaFormatter#Format(0)<CR>
+vnoremap <localleader>jf :<C-u>call JuliaFormatter#Format(1)<CR>
+```
+
+Save the above to a file `MINRC`, and run `vim -u MINRC tests/test.jl` and try hitting `\jf` in normal or visual mode.
