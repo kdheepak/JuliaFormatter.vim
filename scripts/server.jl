@@ -1,3 +1,6 @@
+using Pkg
+Pkg.instantiate()
+
 using JuliaFormatter
 using Dates
 using JSON
