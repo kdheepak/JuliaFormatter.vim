@@ -10,20 +10,20 @@ function! s:DeleteLines(lineFirst, lineLast)
     silent! exec a:lineFirst . "," . a:lineLast ."d _"
 endfunction
 
-function! s:AddPrefix(message) abort
+function! s:AddPrefix(message)
     return '[JuliaFormatter] ' . a:message
 endfunction
 
-function! s:Echo(message) abort
+function! s:Echo(message)
     echomsg s:AddPrefix(a:message)
 endfunction
 
-function! s:Echoerr(message) abort
+function! s:Echoerr(message)
     echohl Error | echomsg s:AddPrefix(a:message) | echohl None
 endfunction
 
 " vim execute callback for every line.
-function! s:HandleMessage(job, lines, event) abort
+function! s:HandleMessage(job, lines, event)
     if a:event ==# 'stdout'
         let l:message = json_decode(join(a:lines))
         if get(l:message, 'status') ==# 'success'
@@ -41,13 +41,13 @@ function! s:HandleMessage(job, lines, event) abort
     endif
 endfunction
 
-function! s:HandleVim(job, data) abort
-    return s:HandleMessage(a:job, [a:data], '')
+function! s:HandleVim(job, data)
+    return s:HandleMessage(a:job, [ch_readraw(a:job), a:data], 'stdout')
 endfunction
 
 let s:root = expand('<sfile>:p:h:h')
 
-function! JuliaFormatter#binaryPath() abort
+function! JuliaFormatter#binaryPath()
     let l:filename = 'julia'
     if has('win32')
         let l:filename .= '.exe'
@@ -55,7 +55,7 @@ function! JuliaFormatter#binaryPath() abort
     return l:filename
 endfunction
 
-function! JuliaFormatter#Launch() abort
+function! JuliaFormatter#Launch()
 
     call s:Echo("Launching stdio server ...")
 
@@ -86,9 +86,7 @@ function! JuliaFormatter#Launch() abort
     elseif has('job')
         " FIXME: stdout callback should fire after job finishes
         let s:job = job_start(l:cmd, {
-                    \ 'out_cb': function('s:HandleVim'),
-                    \ 'err_cb': function('s:HandleVim'),
-                    \ 'exit_cb': function('s:HandleVim'),
+                    \ "out_cb": function('s:HandleVim'),
                     \ })
         if job_status(s:job) !=# 'run'
             call s:Echoerr('JuliaFormatter: job failed to start or died!')
@@ -103,7 +101,7 @@ function! JuliaFormatter#Launch() abort
     endif
 endfunction
 
-function! JuliaFormatter#Write(message) abort
+function! JuliaFormatter#Write(message)
     let l:message = a:message . "\n"
     if has('nvim')
         " jobsend respond 1 for success.
@@ -115,7 +113,7 @@ function! JuliaFormatter#Write(message) abort
     endif
 endfunction
 
-function! JuliaFormatter#Send(method, params) abort
+function! JuliaFormatter#Send(method, params)
     let l:params = a:params
     return JuliaFormatter#Write(json_encode({
                 \ 'method': a:method,
@@ -123,15 +121,8 @@ function! JuliaFormatter#Send(method, params) abort
                 \ }))
 endfunction
 
-function! JuliaFormatter#handleVimLeavePre() abort
-    try
-        return JuliaFormatter#Send('quit', {})
-    catch
-    endtry
-endfunction
-
 " JuliaFormatter#Format
-function! JuliaFormatter#Format(m) abort
+function! JuliaFormatter#Format(m)
     if !get(g:, 'JuliaFormatter_loaded')
         call JuliaFormatter#Launch()
     end

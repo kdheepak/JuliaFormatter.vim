@@ -52,7 +52,7 @@ function main()
             log(output, spacer = "\n")
             data["params"]["text"] =
                 [rstrip(lpad(l, length(l) + indent)) for l in split(output, "\n")]
-            print(stdout, JSON.json(data))
+            println(stdout, JSON.json(data))
             log("Done.")
         end
     end
