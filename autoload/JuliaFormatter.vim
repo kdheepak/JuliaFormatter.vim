@@ -71,7 +71,11 @@ function! JuliaFormatter#Launch()
         return 0
     endif
 
-    let l:cmd = join([l:binpath, '--startup-file=no', '--project=' . s:root, s:root . '/scripts/server.jl'])
+    let l:cmd = join([l:binpath,
+          \ '--startup-file=no',
+          \ '--project=' . s:root,
+          \ '-e "format_options = (' . g:JuliaFormatter_options . ')"',
+          \ '-L' . s:root . '/scripts/server.jl'])
     if has('nvim')
         let s:job = jobstart(l:cmd, {
                     \ 'on_stdout': function('s:HandleMessage'),

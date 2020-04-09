@@ -49,6 +49,13 @@ vnoremap <localleader>jf :<C-u>call JuliaFormatter#Format(1)<CR>
 The (n)vim documentation recommends using `<localleader>` for a filetype plugin, but feel free to use `<leader>` or `<localleader>` for this remap.
 In (n)vim, both `<leader>` and `<localleader>` are set to the `\` key by default.
 
+### Setting Format Options
+
+To modify the formatting options can be modified by setting `g:JuliaFormatter_options` in your `vimrc`. An example of this is:
+```vim
+let g:JuliaFormatter_options = 'indent = 4, margin = 92, always_for_in = false, whitespace_typedefs = false, whitespace_ops_in_indices = true'
+```
+
 ### Troubleshooting
 
 See [`MINRC`](./tests/MINRC) before opening an issue.
