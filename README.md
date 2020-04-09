@@ -63,7 +63,7 @@ let g:JuliaFormatter_options = {
 }
 ```
 
-See full list of options over at [the JuliaFormatter API documentation](https://domluna.github.io/JuliaFormatter.jl/stable/api/#JuliaFormatter.format_file-Tuple{AbstractString}).
+See full list of options over on the [JuliaFormatter API documentation](https://domluna.github.io/JuliaFormatter.jl/stable/api/#JuliaFormatter.format_file-Tuple{AbstractString}).
 
 ### Troubleshooting
 
