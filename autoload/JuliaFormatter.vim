@@ -35,6 +35,9 @@ function! s:HandleMessage(job, lines, event)
             let l:text = get(get(l:message, 'params'), 'text')
             call s:DeleteLines(s:line_start, s:line_end)
             call s:PutLines(l:text, s:line_start)
+            if s:delete_last_line
+                execute "normal dd"
+            endif
             echomsg ""
         elseif get(l:message, 'status') ==# 'error'
             call s:Echoerr("ERROR: JuliaFormatter.jl could not parse text.")
@@ -143,6 +146,11 @@ function! JuliaFormatter#Format(m)
         " Get all lines in the file
         let s:line_start =  1
         let s:line_end = line('$')
+    endif
+    if s:line_start ==# 1 && s:line_end ==# line('$')
+        let s:delete_last_line = v:true
+    else
+        let s:delete_last_line = v:false
     endif
     let l:content = getline(s:line_start, s:line_end)
     return JuliaFormatter#Send('format', {
