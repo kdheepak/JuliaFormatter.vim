@@ -10,3 +10,7 @@ let g:loaded_juliaformatter = 1
 function! JuliaFormatter_Launch()
     return call('JuliaFormatter#Launch', a:000)
 endfunction
+
+if !exists("g:JuliaFormatter_options")
+  let g:JuliaFormatter_options = ''
+endif

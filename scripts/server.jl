@@ -34,14 +34,7 @@ function main()
             log("Formatting: ")
             log(join(text, "\n"), spacer = "\n")
             try
-                output = format_text(
-                    join(text, "\n"),
-                    indent = 4,
-                    margin = 92,
-                    always_for_in = false,
-                    whitespace_typedefs = false,
-                    whitespace_ops_in_indices = true,
-                )
+                output = format_text(join(text, "\n"); format_options...)
                 data["status"] = "success"
             catch
                 log("failed")
