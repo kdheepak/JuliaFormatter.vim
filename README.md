@@ -129,6 +129,38 @@ When found, the configurations in the file will overwrite the options provided b
 
 See <https://domluna.github.io/JuliaFormatter.jl/stable/config/> for more information.
 
+### Precompiling JuliaFormatter using PackageCompiler
+
+Using a custom system image can speedup the initialization time of the plugin.
+This can be done using
+[`PackageCompiler`](https://github.com/JuliaLang/PackageCompiler.jl). There are
+[drawbacks](https://julialang.github.io/PackageCompiler.jl/dev/sysimages/#Drawbacks-to-custom-sysimages-1)
+of using `PackageCompiler`:
+
+> It should be clearly stated that there are some drawbacks to using a custom
+> sysimage, thereby sidestepping the standard Julia package precompilation
+> system. The biggest drawback is that packages that are compiled into a
+> sysimage (including their dependencies!) are "locked" to the version they
+> where at when the sysimage was created. This means that no matter what package
+> version you have installed in your current project, the one in the sysimage
+> will take precedence. This can lead to bugs where you start with a project
+> that needs a specific version of a package, but you have another one compiled
+> into the sysimage.
+
+`PackageCompiler` can be used with the `JuliaFormatter` using the
+following commands (from a top-level directory of a clone of
+`JuliaFormatter.vim`)
+
+```
+$ julia --project scripts/packagecompiler.jl
+```
+
+Then in your `vimrc` set:
+
+```vim
+let g:JuliaFormatter_use_sysimage=1
+```
+
 ### Troubleshooting
 
 See [`MINRC`](./tests/MINRC) before opening an issue.
