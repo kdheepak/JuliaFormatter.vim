@@ -60,7 +60,7 @@ let g:JuliaFormatter_options = {
         \ 'always_for_in'             : v:false,
         \ 'whitespace_typedefs'       : v:false,
         \ 'whitespace_ops_in_indices' : v:true,
-}
+        \ }
 ```
 
 See full list of options over on the [JuliaFormatter API documentation](https://domluna.github.io/JuliaFormatter.jl/stable/api/#JuliaFormatter.format_file-Tuple{AbstractString}).
