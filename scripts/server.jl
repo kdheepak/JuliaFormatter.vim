@@ -14,16 +14,23 @@ function log(msg; spacer = " ")
     flush(logfile)
 end
 
-function main()
+format_options = Dict{Symbol, Any}()
 
+function main()
     server_state = "start"
     while server_state != "quit"
+        log("waiting for stdin ... ")
         text = readavailable(stdin)
         data = JSON.parse(String(text))
+        log("Received data $data")
         if data["method"] == "exit"
             server_state = "quit"
         elseif data["method"] == "format"
             text = data["params"]["text"]
+            options = data["params"]["options"]
+            for (k,v) in options
+                format_options[Symbol(k)] = v
+            end
             output = text
             indent = typemax(Int64)
             for line in text
@@ -36,8 +43,8 @@ function main()
             try
                 output = format_text(join(text, "\n"); format_options...)
                 data["status"] = "success"
-            catch
-                log("failed")
+            catch e
+                log("failed $e")
                 output = join(text, "\n")
                 data["status"] = "error"
             end

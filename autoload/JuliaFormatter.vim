@@ -75,8 +75,9 @@ function! JuliaFormatter#Launch()
     let l:cmd = join([l:binpath,
           \ '--startup-file=no',
           \ '--project=' . s:root,
-          \ '-e "format_options = (' . g:JuliaFormatter_options . ')"',
-          \ '-L' . s:root . '/scripts/server.jl'])
+          \ s:root . '/scripts/server.jl',
+          \ ])
+
     if has('nvim')
         let s:job = jobstart(l:cmd, {
                     \ 'on_stdout': function('s:HandleMessage'),
@@ -124,10 +125,9 @@ function! JuliaFormatter#Write(message)
 endfunction
 
 function! JuliaFormatter#Send(method, params)
-    let l:params = a:params
     return JuliaFormatter#Write(json_encode({
                 \ 'method': a:method,
-                \ 'params': l:params,
+                \ 'params': a:params,
                 \ }))
 endfunction
 
@@ -146,5 +146,8 @@ function! JuliaFormatter#Format(m)
         let g:line_end = line('$')
     endif
     let l:content = getline(g:line_start, g:line_end)
-    return JuliaFormatter#Send('format', {'text': l:content})
+    return JuliaFormatter#Send('format', {
+        \ 'text': l:content,
+        \ 'options': g:JuliaFormatter_options,
+        \ })
 endfunction

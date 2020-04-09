@@ -52,9 +52,18 @@ In (n)vim, both `<leader>` and `<localleader>` are set to the `\` key by default
 ### Setting Format Options
 
 To modify the formatting options can be modified by setting `g:JuliaFormatter_options` in your `vimrc`. An example of this is:
+
 ```vim
-let g:JuliaFormatter_options = 'indent = 4, margin = 92, always_for_in = false, whitespace_typedefs = false, whitespace_ops_in_indices = true'
+let g:JuliaFormatter_options = {
+        \ 'indent'                    : 4,
+        \ 'margin'                    : 92,
+        \ 'always_for_in'             : v:false,
+        \ 'whitespace_typedefs'       : v:false,
+        \ 'whitespace_ops_in_indices' : v:true,
+}
 ```
+
+See full list of options over at [the JuliaFormatter API documentation](https://domluna.github.io/JuliaFormatter.jl/stable/api/#JuliaFormatter.format_file-Tuple{AbstractString}).
 
 ### Troubleshooting
 
