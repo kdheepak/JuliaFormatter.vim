@@ -25,7 +25,12 @@ endfunction
 " vim execute callback for every line.
 function! s:HandleMessage(job, lines, event)
     if a:event ==# 'stdout'
-        let l:message = json_decode(join(a:lines))
+        try
+            let l:message = json_decode(join(a:lines))
+        catch
+            " call s:Echo("Unable to decode " . join(a:lines))
+            return
+        endtry
         if get(l:message, 'status') ==# 'success'
             let l:text = get(get(l:message, 'params'), 'text')
             call s:DeleteLines(g:line_start, g:line_end)
