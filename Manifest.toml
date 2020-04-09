@@ -5,9 +5,15 @@ uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
 
 [[CSTParser]]
 deps = ["Tokenize"]
-git-tree-sha1 = "e8166cc32a3bfedc97eda16db428b1faba29ca8e"
+git-tree-sha1 = "7d10b92c4d9951ccf3009d960d9b66883c174474"
 uuid = "00ebfdb7-1f24-5e51-bd34-a7502290713f"
-version = "2.0.0"
+version = "2.2.0"
+
+[[DataStructures]]
+deps = ["InteractiveUtils", "OrderedCollections"]
+git-tree-sha1 = "73eb18320fe3ba58790c8b8f6f89420f0a622773"
+uuid = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
+version = "0.17.11"
 
 [[Dates]]
 deps = ["Printf"]
@@ -28,10 +34,10 @@ uuid = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 version = "0.21.0"
 
 [[JuliaFormatter]]
-deps = ["CSTParser", "Test", "Tokenize"]
-git-tree-sha1 = "a5a91c75f52c64a6059d83ca9550c2c450e5984e"
+deps = ["CSTParser", "DataStructures", "Test", "Tokenize"]
+git-tree-sha1 = "0008b1d9ef1175f304573e40ca28f0421706a004"
 uuid = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
-version = "0.2.2"
+version = "0.4.1"
 
 [[Logging]]
 uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
@@ -43,11 +49,17 @@ uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 [[Mmap]]
 uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 
+[[OrderedCollections]]
+deps = ["Random", "Serialization", "Test"]
+git-tree-sha1 = "c4c13474d23c60d20a67b217f1d7f22a40edf8f1"
+uuid = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
+version = "1.1.0"
+
 [[Parsers]]
 deps = ["Dates", "Test"]
-git-tree-sha1 = "0139ba59ce9bc680e2925aec5b7db79065d60556"
+git-tree-sha1 = "75d07cb840c300084634b4991761886d0d762724"
 uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
-version = "0.3.10"
+version = "1.0.1"
 
 [[Printf]]
 deps = ["Unicode"]
@@ -68,9 +80,9 @@ deps = ["Distributed", "InteractiveUtils", "Logging", "Random"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [[Tokenize]]
-git-tree-sha1 = "c3aab236f122445406cf7a6de8af0b794da5a950"
+git-tree-sha1 = "73c00ad506d88a7e8e4f90f48a70943101728227"
 uuid = "0796e94c-ce3b-5d07-9a54-7f471281c624"
-version = "0.5.7"
+version = "0.5.8"
 
 [[Unicode]]
 uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
