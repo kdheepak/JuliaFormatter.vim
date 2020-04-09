@@ -65,6 +65,49 @@ let g:JuliaFormatter_options = {
 
 See full list of options over on the [JuliaFormatter API documentation](https://domluna.github.io/JuliaFormatter.jl/stable/api/#JuliaFormatter.format_file-Tuple{AbstractString}).
 
+### Precompiling the JuliaFormatter
+
+Using a custom system image can speedup the initialization time of the plugin.
+This can be done using the
+[`PackageCompiler`](https://github.com/JuliaLang/PackageCompiler.jl). The
+[drawbacks](https://julialang.github.io/PackageCompiler.jl/dev/sysimages/#Drawbacks-to-custom-sysimages-1)
+of the `PackageCompiler`
+
+> It should be clearly stated that there are some drawbacks to using a custom
+> sysimage, thereby sidestepping the standard Julia package precompilation
+> system. The biggest drawback is that packages that are compiled into a
+> sysimage (including their dependencies!) are "locked" to the version they
+> where at when the sysimage was created. This means that no matter what package
+> version you have installed in your current project, the one in the sysimage
+> will take precedence. This can lead to bugs where you start with a project
+> that needs a specific version of a package, but you have another one compiled
+> into the sysimage.
+
+The `PackageCompiler` compiler can be used with the `JuliaFormatter` using the
+following commands (from a top-level directory of a clone of
+`JuliaFormatter.vim`)
+```
+$ julia -q
+julia> using Pkg
+julia> Pkg.add("PackageCompiler")
+julia> using PackageCompiler
+julia> Pkg.activate(@__DIR__)
+julia> PackageCompiler.create_sysimage([:JuliaFormatter, :JSON]; precompile_execution_file=joinpath(@__DIR__, "scripts/precompile.jl"), replace_default=true)
+```
+
+If you cannot (or do want to) modify the default system image, instead the
+following commands can be used
+```
+$ julia -q
+julia> using Pkg
+julia> Pkg.add("PackageCompiler")
+julia> using PackageCompiler
+julia> Pkg.activate(joinpath(@__DIR__,".dev"))
+julia> PackageCompiler.create_sysimage([:JuliaFormatter, :JSON]; precompile_execution_file=joinpath(@__DIR__, "scripts/precompile.jl"), sysimage_path="path/to/sysimage.so")
+```
+In this case you should also set
+`g:JuliaFormatter_sysimage='path/to/sysimage.so'` in your `vimrc`.
+
 ### Troubleshooting
 
 See [`MINRC`](./tests/MINRC) before opening an issue.
