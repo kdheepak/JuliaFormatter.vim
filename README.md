@@ -65,6 +65,34 @@ let g:JuliaFormatter_options = {
 
 See full list of options over on the [JuliaFormatter API documentation](https://domluna.github.io/JuliaFormatter.jl/stable/api/#JuliaFormatter.format_file-Tuple{AbstractString}).
 
+### Compatibility with BlueStyle
+
+JuliaFormatter enables complete compatibility with [BlueStyle](https://github.com/invenia/BlueStyle).
+Here is how to configure (n)vim for BlueStyle:
+
+1. Install JuliaFormatter.vim
+
+2. Add the following to your vimrc to follow the BlueStyle standard:
+
+```vim
+let g:JuliaFormatter_options = {
+        \ 'indent'                    : 4,
+        \ 'margin'                    : 92,
+        \ 'always_for_in'             : v:false,
+        \ 'whitespace_typedefs'       : v:false,
+        \ 'whitespace_ops_in_indices' : v:true,
+        \ }
+```
+
+3. Create a file in the path `~/.vim/after/ftplugin/julia.vim` and add to the julia.vim file the following:
+
+```vim
+" ~/.vim/after/ftplugin/julia.vim
+setlocal expandtab       " Replace tabs with spaces.
+setlocal textwidth=92    " Limit lines according to Julia's CONTRIBUTING guidelines.
+setlocal colorcolumn+=1  " Highlight first column beyond the line limit.
+```
+
 ### Troubleshooting
 
 See [`MINRC`](./tests/MINRC) before opening an issue.
