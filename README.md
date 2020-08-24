@@ -78,7 +78,7 @@ Here is how to configure (n)vim for BlueStyle:
 let g:JuliaFormatter_options = {
         \ 'indent'                    : 4,
         \ 'margin'                    : 92,
-        \ 'always_for_in'             : v:false,
+        \ 'always_for_in'             : v:true,
         \ 'whitespace_typedefs'       : v:false,
         \ 'whitespace_ops_in_indices' : v:true,
         \ }
