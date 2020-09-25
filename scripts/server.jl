@@ -63,6 +63,7 @@ function main()
                 data["status"] = "error"
             end
             log("\n---------------------------------------------------------------------\n")
+            log("Formatted: ")
             log(output, spacer = "\n")
             data["params"]["text"] =
                 [rstrip(lpad(l, length(l) + indent)) for l in split(output, "\n")]
