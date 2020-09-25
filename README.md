@@ -63,11 +63,18 @@ let g:JuliaFormatter_options = {
         \ }
 ```
 
+This translates to a call to:
+
+```julia
+JuliaFormatter.format_text(vim_text_selection_or_buffer, indent = 4, margin = 92; always_for_in = true, whitespace_typedef = false, whitespace_ops_in_indices = true)
+```
+
 See full list of options over on the [JuliaFormatter API documentation](https://domluna.github.io/JuliaFormatter.jl/stable/api/#JuliaFormatter.format_file-Tuple{AbstractString}).
 
 ### Compatibility with BlueStyle
 
 JuliaFormatter enables complete compatibility with [BlueStyle](https://github.com/invenia/BlueStyle).
+
 Here is how to configure (n)vim for BlueStyle:
 
 1. Install JuliaFormatter.vim
@@ -76,12 +83,15 @@ Here is how to configure (n)vim for BlueStyle:
 
 ```vim
 let g:JuliaFormatter_options = {
-        \ 'indent'                    : 4,
-        \ 'margin'                    : 92,
-        \ 'always_for_in'             : v:true,
-        \ 'whitespace_typedefs'       : v:false,
-        \ 'whitespace_ops_in_indices' : v:true,
+        \ 'style' : 'BlueStyle',
         \ }
+```
+
+This translates to a call to:
+
+```julia
+style = BlueStyle()
+JuliaFormatter.format_text(vim_text_selection_or_buffer, style)
 ```
 
 3. Create a file in the path `~/.vim/after/ftplugin/julia.vim` and add to the julia.vim file the following:
@@ -92,6 +102,7 @@ setlocal expandtab       " Replace tabs with spaces.
 setlocal textwidth=92    " Limit lines according to Julia's CONTRIBUTING guidelines.
 setlocal colorcolumn+=1  " Highlight first column beyond the line limit.
 ```
+
 
 ### Troubleshooting
 
