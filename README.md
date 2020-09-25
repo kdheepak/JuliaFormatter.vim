@@ -83,7 +83,7 @@ Here is how to configure (n)vim for BlueStyle:
 
 ```vim
 let g:JuliaFormatter_options = {
-        \ 'style' : 'BlueStyle',
+        \ 'style' : 'blue',
         \ }
 ```
 
