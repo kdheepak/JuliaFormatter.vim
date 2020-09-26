@@ -193,6 +193,7 @@ function! JuliaFormatter#FormatCommand(line1, count, range, mods, arg, args) abo
     return JuliaFormatter#Send('format', {
         \ 'text': l:content,
         \ 'options': g:JuliaFormatter_options,
+        \ 'filepath': expand('%:p'),
         \ })
   endtry
 endfunction
