@@ -1,1 +1,4 @@
 scripts/juliaformatter.log
+scripts/juliaformatter.dylib
+scripts/juliaformatter.so
+scripts/juliaformatter.dll
