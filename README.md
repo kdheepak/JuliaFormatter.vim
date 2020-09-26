@@ -153,6 +153,8 @@ of using `PackageCompiler`:
 $ julia --project /path/to/JuliaFormatter.vim/scripts/packagecompiler.jl
 ```
 
+Check the vim or your plugin manager documentation for this location.
+
 Then in your `vimrc` set:
 
 ```vim
