@@ -153,7 +153,7 @@ of using `PackageCompiler`:
 $ julia --project /path/to/JuliaFormatter.vim/scripts/packagecompiler.jl
 ```
 
-Check the vim or your plugin manager documentation for this location.
+You can type `:echo g:JuliaFormatter_root` to find where this folder is located. For more information check vim documentation or consult your plugin manager documentation.
 
 Then in your `vimrc` set:
 

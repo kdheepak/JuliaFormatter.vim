@@ -14,6 +14,7 @@ if !exists("g:os")
 endif
 
 let s:root = expand('<sfile>:h:h')
+let g:JuliaFormatter_root = s:root
 
 if g:os ==# "Darwin"
     let s:ext = ".dylib"
