@@ -15,6 +15,7 @@ endif
 
 let s:root = expand('<sfile>:h:h')
 let g:JuliaFormatter_root = s:root
+let g:JuliaFormatter_log = s:root . '/scripts/juliaformatter.log'
 
 if g:os ==# "Darwin"
     let s:ext = ".dylib"
@@ -38,6 +39,8 @@ if !exists("g:JuliaFormatter_sysimage_path")
     let g:JuliaFormatter_sysimage_path = s:root . '/scripts/juliaformatter' . s:ext
 endif
 
+command! JuliaFormatterLog execute 'edit ' . g:JuliaFormatter_log
+
 command! -range=% -nargs=* JuliaFormatterFormat call JuliaFormatter#FormatCommand(
     \ <line1>,
     \ <count>,
@@ -46,7 +49,6 @@ command! -range=% -nargs=* JuliaFormatterFormat call JuliaFormatter#FormatComman
     \ <q-args>,
     \ [<f-args>]
     \ )
-
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 
