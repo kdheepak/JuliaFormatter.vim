@@ -147,12 +147,10 @@ of using `PackageCompiler`:
 > that needs a specific version of a package, but you have another one compiled
 > into the sysimage.
 
-`PackageCompiler` can be used with the `JuliaFormatter` using the
-following commands (from a top-level directory of a clone of
-`JuliaFormatter.vim`)
+`PackageCompiler` can be used with `JuliaFormatter.vim` by running the following:
 
 ```
-$ julia --project scripts/packagecompiler.jl
+$ julia --project /path/to/JuliaFormatter.vim/scripts/packagecompiler.jl
 ```
 
 Then in your `vimrc` set:
