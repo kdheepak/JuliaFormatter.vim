@@ -37,13 +37,17 @@ function main()
         log("waiting for stdin ... ")
         text = readavailable(stdin)
         data_lines = String(text)
-        log("received text: $data_lines")
         for data in split(data_lines, '\n')
             format_options = Dict{Symbol,Any}()
+            if length(data) == 0
+                continue
+            end
             try
                 data = JSON.parse(String(data))
             catch e
-                log("Unable to parse json: $data. $e")
+                iob = IOBuffer()
+                showerror(iob, e, catch_backtrace())
+                log("Unable to parse json: \"$data\". $(String(take!(iob)))")
                 continue
             end
             if data["method"] == "exit"
