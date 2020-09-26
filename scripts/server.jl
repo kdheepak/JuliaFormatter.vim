@@ -21,54 +21,64 @@ function main()
     while server_state != "quit"
         log("waiting for stdin ... ")
         text = readavailable(stdin)
-        data = JSON.parse(String(text))
-        log("Received data $data")
-        if data["method"] == "exit"
-            server_state = "quit"
-        elseif data["method"] == "format"
-            log("Setting up defaults ...")
-            text = data["params"]["text"]
-            options = data["params"]["options"]
-            style = pop!(options, "style", nothing)
-            style = if style == "blue"
-                BlueStyle()
-            elseif style == "yas"
-                YASStyle()
-            elseif style == nothing || style == "default"
-                DefaultStyle()
-            else
-                log("Unknown style option $style")
-                DefaultStyle()
-            end
-            for (k,v) in options
-                format_options[Symbol(k)] = v
-            end
-            log("Using options: $format_options with style: $style")
-            output = text
-            indent = typemax(Int64)
-            for line in text
-                if length(line) > 0
-                    indent = min(length(line) - length(lstrip(line)), indent)
-                end
-            end
-            log("Formatting: ")
-            log(join(text, "\n"), spacer = "\n")
+        data_lines = String(text)
+        log("received text: $data_lines")
+        for data in split(data_lines, '\n')
             try
-                output = format_text(join(text, "\n"), style; format_options...)
-                log("Success")
-                data["status"] = "success"
+                data = JSON.parse(String(data))
             catch e
-                log("failed $e")
-                output = join(text, "\n")
-                data["status"] = "error"
+                log("Unable to parse json: $data. $e")
+                continue
             end
-            log("\n---------------------------------------------------------------------\n")
-            log("Formatted: ")
-            log(output, spacer = "\n")
-            data["params"]["text"] =
-                [rstrip(lpad(l, length(l) + indent)) for l in split(output, "\n")]
-            println(stdout, JSON.json(data))
-            log("Done.")
+            if data["method"] == "exit"
+                server_state = "quit"
+            elseif data["method"] == "isconnectedcheck"
+                log("Connected.")
+            elseif data["method"] == "format"
+                log("Setting up defaults ...")
+                text = data["params"]["text"]
+                options = data["params"]["options"]
+                style = pop!(options, "style", nothing)
+                style = if style == "blue"
+                    BlueStyle()
+                elseif style == "yas"
+                    YASStyle()
+                elseif style == nothing || style == "default"
+                    DefaultStyle()
+                else
+                    log("Unknown style option $style")
+                    DefaultStyle()
+                end
+                for (k,v) in options
+                    format_options[Symbol(k)] = v
+                end
+                log("Using options: $format_options with style: $style")
+                output = text
+                indent = typemax(Int64)
+                for line in text
+                    if length(line) > 0
+                        indent = min(length(line) - length(lstrip(line)), indent)
+                    end
+                end
+                log("Formatting: ")
+                log(join(text, "\n"), spacer = "\n")
+                try
+                    output = format_text(join(text, "\n"), style; format_options...)
+                    log("Success")
+                    data["status"] = "success"
+                catch e
+                    log("failed $e")
+                    output = join(text, "\n")
+                    data["status"] = "error"
+                end
+                log("\n---------------------------------------------------------------------\n")
+                log("Formatted: ")
+                log(output, spacer = "\n")
+                data["params"]["text"] =
+                    [rstrip(lpad(l, length(l) + indent)) for l in split(output, "\n")]
+                println(stdout, JSON.json(data))
+                log("Done.")
+            end
         end
     end
 

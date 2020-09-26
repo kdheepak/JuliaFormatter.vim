@@ -115,10 +115,11 @@ function! JuliaFormatter#Launch()
 endfunction
 
 function! JuliaFormatter#Write(message)
+    " Add new line so server can split on lines
     let l:message = a:message . "\n"
     if has('nvim')
-        " jobsend respond 1 for success.
-        return !jobsend(s:job, l:message)
+        " chansend respond 1 for success.
+        return !chansend(s:job, l:message)
     elseif has('channel')
         return ch_sendraw(s:job, l:message)
     else
@@ -126,11 +127,27 @@ function! JuliaFormatter#Write(message)
     endif
 endfunction
 
+function! JuliaFormatter#CheckJobId()
+    try
+        call JuliaFormatter#Write(json_encode({
+                    \ 'method': 'isconnectedcheck',
+                    \ }))
+        return 1
+    catch
+        call s:Echoerr("JuliaFormatter seems to have crashed. Check logs for more information. Restarting ...")
+        call JuliaFormatter#Launch()
+        return 1
+    endtry
+endfunction
+
 function! JuliaFormatter#Send(method, params)
-    return JuliaFormatter#Write(json_encode({
-                \ 'method': a:method,
-                \ 'params': a:params,
-                \ }))
+    let l:isconnected = JuliaFormatter#CheckJobId()
+    if l:isconnected == 1
+      return JuliaFormatter#Write(json_encode({
+                  \ 'method': a:method,
+                  \ 'params': a:params,
+                  \ }))
+    endif
 endfunction
 
 " JuliaFormatter#Format
@@ -157,4 +174,25 @@ function! JuliaFormatter#Format(m)
         \ 'text': l:content,
         \ 'options': g:JuliaFormatter_options,
         \ })
+endfunction
+
+
+function! JuliaFormatter#FormatCommand(line1, count, range, mods, arg, args) abort
+  let s:line_start = a:count > 0 ? a:line1 : 1
+  let s:line_end = a:count > 0 ? a:count : line('$')
+  if s:line_start ==# 1 && s:line_end ==# line('$')
+      let s:delete_last_line = v:true
+  else
+      let s:delete_last_line = v:false
+  endif
+  try
+    if !get(g:, 'JuliaFormatter_loaded')
+        call JuliaFormatter#Launch()
+    end
+    let l:content = getline(s:line_start, s:line_end)
+    return JuliaFormatter#Send('format', {
+        \ 'text': l:content,
+        \ 'options': g:JuliaFormatter_options,
+        \ })
+  endtry
 endfunction

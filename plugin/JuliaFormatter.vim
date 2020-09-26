@@ -16,3 +16,12 @@ if !exists("g:JuliaFormatter_options")
         \ 'whitespace_ops_in_indices' : v:true,
         \ }
 endif
+
+command! -range=% -nargs=* JuliaFormatterFormat call JuliaFormatter#FormatCommand(
+    \ <line1>,
+    \ <count>,
+    \ +"<range>",
+    \ "<mods>",
+    \ <q-args>,
+    \ [<f-args>]
+    \ )
