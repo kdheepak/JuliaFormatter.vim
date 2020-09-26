@@ -92,9 +92,17 @@ function main()
                 end
                 log("Formatting: ")
                 log(join(text, "\n"), spacer = "\n")
-                output = format_text(join(text, "\n"); format_options...)
-                log("Success")
-                data["status"] = "success"
+                try
+                    output = format_text(join(text, "\n"); format_options...)
+                    data["status"] = "success"
+                    log("Success")
+                catch e
+                    output = join(text, "\n")
+                    data["status"] = "error"
+                    iob = IOBuffer()
+                    showerror(iob, e, catch_backtrace())
+                    log(String(take!(iob)))
+                end
                 log("\n---------------------------------------------------------------------\n")
                 log("Formatted: ")
                 log(output, spacer = "\n")
