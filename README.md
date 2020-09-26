@@ -105,6 +105,12 @@ setlocal textwidth=92    " Limit lines according to Julia's CONTRIBUTING guideli
 setlocal colorcolumn+=1  " Highlight first column beyond the line limit.
 ```
 
+### Support `.JuliaFormatter.toml` configuration
+
+When `:JuliaFormatterFormat` is called, it will look for `.JuliaFormatter.toml` in the location of the file being formatted, and searching up the file tree until a config file is (or isn't) found.
+When found, the configurations in the file will overwrite the options provided by `g:JuliaFormatter_options`.
+
+See <https://domluna.github.io/JuliaFormatter.jl/stable/config/> for more information.
 
 ### Troubleshooting
 
