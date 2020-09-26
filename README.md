@@ -65,7 +65,7 @@ Feel free to open an issue for debugging a problem, questions or feature request
 
 <details>
 
-<summary> > Click to expand! </summary>
+<summary> Click to expand! </summary>
 
 To modify the formatting options can be modified by setting `g:JuliaFormatter_options` in your `vimrc`. An example of this is:
 
@@ -93,7 +93,7 @@ See full list of options over on the [JuliaFormatter API documentation](https://
 
 <details>
 
-<summary> > Click to expand! </summary>
+<summary> Click to expand! </summary>
 
 `JuliaFormatter.vim` enables compatibility with [BlueStyle](https://github.com/invenia/BlueStyle) and [YAS](https://github.com/jrevels/YASGuide).
 
@@ -148,7 +148,7 @@ Here is how to configure (n)vim for `BlueStyle` or `YAS`:
 
 <details>
 
-<summary> > Click to expand! </summary>
+<summary> Click to expand! </summary>
 
 When `:JuliaFormatterFormat` is called, it will look for `.JuliaFormatter.toml` in the location of the file being formatted, and searching up the file tree until a config file is (or isn't) found.
 When found, the configurations in the file will overwrite the options provided by `g:JuliaFormatter_options`.
@@ -161,7 +161,7 @@ See <https://domluna.github.io/JuliaFormatter.jl/stable/config/> for more inform
 
 <details>
 
-<summary> > Click to expand! </summary>
+<summary> Click to expand! </summary>
 
 Using a custom system image can speedup the initialization time of the plugin.
 This can be done using
@@ -198,7 +198,7 @@ let g:JuliaFormatter_sysimage_path="/path/to/julia_sysimage.so"
 
 <details>
 
-<summary> > Click to expand! </summary>
+<summary> Click to expand! </summary>
 
 By default, the `JuliaFormatter` server is only started the first time you call `:JuliaFormatterFormat`.
 This means your first format will be slower than the remaining times for an open session of (n)vim.
@@ -220,7 +220,7 @@ let g:JuliaFormatter_always_launch_server=1
 
 <details>
 
-<summary> > Click to expand! </summary>
+<summary> Click to expand! </summary>
 
 See [`MINRC`](./tests/MINRC) before opening an issue.
 
