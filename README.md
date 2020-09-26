@@ -51,6 +51,14 @@ vnoremap <localleader>jf :JuliaFormatterFormat<CR>
 The (n)vim documentation recommends using `<localleader>` for a filetype plugin, but feel free to use `<leader>` or `<localleader>` for this remap.
 In (n)vim, both `<leader>` and `<localleader>` are set to the `\` key by default.
 
+You can access the JuliaFormatter log file by running the following:
+
+```
+:JuliaFormatterLog
+```
+
+Feel free to open an issue for debugging a problem, questions or feature requests.
+
 ### Setting Format Options
 
 To modify the formatting options can be modified by setting `g:JuliaFormatter_options` in your `vimrc`. An example of this is:
