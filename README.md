@@ -1,6 +1,6 @@
 # JuliaFormatter.vim
 
-Plugin for formatting Julia code in (n)vim using [JuliaFormatter.jl](https://github.com/domluna/JuliaFormatter.jl).
+Plugin for formatting Julia code in (n)vim using [`JuliaFormatter.jl`](https://github.com/domluna/JuliaFormatter.jl).
 
 ![](https://user-images.githubusercontent.com/1813121/72941091-0b146300-3d68-11ea-9c95-75ec979caf6e.gif)
 
@@ -51,7 +51,7 @@ vnoremap <localleader>jf :JuliaFormatterFormat<CR>
 The (n)vim documentation recommends using `<localleader>` for a filetype plugin, but feel free to use `<leader>` or `<localleader>` for this remap.
 In (n)vim, both `<leader>` and `<localleader>` are set to the `\` key by default.
 
-You can access the JuliaFormatter log file by running the following:
+You can access the `JuliaFormatter` server log file by running the following:
 
 ```vim
 :JuliaFormatterLog
@@ -89,7 +89,7 @@ Here is how to configure (n)vim for `BlueStyle` or `YAS`:
 
 1. Install [`JuliaFormatter.vim`](#install)
 
-2. Add the following to your vimrc to follow the `BlueStyle` standard:
+2. Add the following to your `vimrc` to follow the `BlueStyle` standard:
 
    ```vim
    let g:JuliaFormatter_options = {
@@ -106,11 +106,11 @@ Here is how to configure (n)vim for `BlueStyle` or `YAS`:
 
    OR
 
-   Add the following to your vimrc to follow the `BlueStyle` standard:
+   Add the following to your `vimrc` to follow the `YAS` standard:
 
    ```vim
    let g:JuliaFormatter_options = {
-           \ 'style' : 'blue',
+           \ 'style' : 'yas',
            \ }
    ```
 
@@ -137,21 +137,22 @@ When found, the configurations in the file will overwrite the options provided b
 
 See <https://domluna.github.io/JuliaFormatter.jl/stable/config/> for more information.
 
-### Precompiling JuliaFormatter using PackageCompiler
+### Precompiling `JuliaFormatter` using `PackageCompiler`
 
 Using a custom system image can speedup the initialization time of the plugin.
 This can be done using
-[`PackageCompiler`](https://github.com/JuliaLang/PackageCompiler.jl).
+[`PackageCompiler.jl`](https://github.com/JuliaLang/PackageCompiler.jl).
 
-`PackageCompiler` can be used with `JuliaFormatter.vim` by running the following:
+`PackageCompiler.jl` can be used with `JuliaFormatter.vim` by running the following:
 
 ```
 $ cd /path/to/JuliaFormatter.vim/
 $ julia --project scripts/packagecompiler.jl
 ```
 
-You can type `:echo g:JuliaFormatter_root` to find where `/path/to/JuliaFormatter.vim/` is. For more information check vim documentation or consult your plugin manager documentation.
-This will create a Julia `sysimage` that is stored in `scripts` folder.
+This will create a Julia `sysimage` that is stored in `/path/to/JuliaFormatter.vim/scripts` folder.
+You can type `:echo g:JuliaFormatter_root` in (n)vim to find where `/path/to/JuliaFormatter.vim/` is.
+For more information check (n)vim documentation or consult your plugin manager documentation.
 
 Then in your `vimrc` set:
 
@@ -159,11 +160,28 @@ Then in your `vimrc` set:
 let g:JuliaFormatter_use_sysimage=1
 ```
 
-If you would like to use a sysimage that is located elsewhere, you can do so:
+If you would like to use a sysimage that is located elsewhere, you can do so too.
+Add the following to your `vimrc`:
 
-```
+```vim
 let g:JuliaFormatter_use_sysimage=1
 let g:JuliaFormatter_sysimage_path="/path/to/julia_sysimage.so"
+```
+
+### Launching the `JuliaFormatter` server when opening a Julia file
+
+By default, the `JuliaFormatter` server is only started the first time you call `:JuliaFormatterFormat`.
+This means your first format will be slower than the remaining times for an open session of (n)vim.
+`PackageCompiler.jl` compiles `JuliaFormatter.jl`, `JSON.jl` and other methods used for formatting Julia code
+and this significantly speeds up the first call to `:JuliaFormatterFormat`.
+Once the server is started, it is waiting for input on `stdin` and remaining calls will be fast.
+
+Additionally, if you would like, you can start the server when you open a Julia file for the first time instead of when
+you call `:JuliaFormatterFormat` for the first time.
+Just add the following in your `vimrc`:
+
+```vim
+let g:JuliaFormatter_always_launch_server=1
 ```
 
 ### Troubleshooting
