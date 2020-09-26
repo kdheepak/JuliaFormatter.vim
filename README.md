@@ -117,12 +117,12 @@ Here is how to configure (n)vim for `BlueStyle` or `YAS`:
 
 3. (_Optional_) Create a file in the path `~/.vim/after/ftplugin/julia.vim` and add to the julia.vim file the following:
 
-```vim
-" ~/.vim/after/ftplugin/julia.vim
-setlocal expandtab       " Replace tabs with spaces.
-setlocal textwidth=92    " Limit lines according to Julia's CONTRIBUTING guidelines.
-setlocal colorcolumn+=1  " Highlight first column beyond the line limit.
-```
+   ```vim
+   " ~/.vim/after/ftplugin/julia.vim
+   setlocal expandtab       " Replace tabs with spaces.
+   setlocal textwidth=92    " Limit lines according to Julia's CONTRIBUTING guidelines.
+   setlocal colorcolumn+=1  " Highlight first column beyond the line limit.
+   ```
 
 ### Support `.JuliaFormatter.toml` configuration
 
