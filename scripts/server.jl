@@ -39,7 +39,7 @@ function main()
         data_lines = String(text)
         log("received text: $data_lines")
         for data in split(data_lines, '\n')
-            format_options = Dict{Symbol, Any}()
+            format_options = Dict{Symbol,Any}()
             try
                 data = JSON.parse(String(data))
             catch e
@@ -66,7 +66,7 @@ function main()
                     log("Unknown style option $style")
                     DefaultStyle()
                 end
-                for (k,v) in options
+                for (k, v) in options
                     format_options[Symbol(k)] = v
                 end
                 format_options[:style] = style
@@ -87,16 +87,18 @@ function main()
                         indent = min(length(line) - length(lstrip(line)), indent)
                     end
                 end
+                if indent == typemax(Int64)
+                    indent = 0
+                end
                 log("Formatting: ")
-                # log(join(text, "\n"), spacer = "\n")
+                log(join(text, "\n"), spacer = "\n")
                 output = format_text(join(text, "\n"); format_options...)
                 log("Success")
                 data["status"] = "success"
                 log("\n---------------------------------------------------------------------\n")
                 log("Formatted: ")
-                # log(output, spacer = "\n")
-                data["params"]["text"] =
-                    [rstrip(lpad(l, length(l) + indent)) for l in split(output, "\n")]
+                log(output, spacer = "\n")
+                data["params"]["text"] = [rstrip(lpad(l, length(l) + indent)) for l in split(output, "\n")]
                 println(stdout, JSON.json(data))
                 log("Done.")
             end

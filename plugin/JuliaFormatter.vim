@@ -1,11 +1,12 @@
-if exists("g:loaded_juliaformatter")
-    finish
-endif
+if exists("g:JuliaFormatter_loaded") | finish | endif
+
+let s:save_cpo = &cpoptions
+set cpoptions&vim
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let s:is_win = has('win32') || has('win64')
 let s:root = expand('<sfile>:h:h')
-
-let g:loaded_juliaformatter = 1
 
 if !exists("g:JuliaFormatter_options")
     let g:JuliaFormatter_options = {
@@ -25,3 +26,11 @@ command! -range=% -nargs=* JuliaFormatterFormat call JuliaFormatter#FormatComman
     \ <q-args>,
     \ [<f-args>]
     \ )
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let &cpoptions = s:save_cpo
+unlet s:save_cpo
+
+let g:JuliaFormatter_loaded = 1

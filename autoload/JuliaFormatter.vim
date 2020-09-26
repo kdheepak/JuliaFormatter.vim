@@ -1,7 +1,3 @@
-if get(g:, 'JuliaFormatter_loaded')
-    finish
-endif
-
 function! s:PutLines(lines, lineStart)
     call append(a:lineStart - 1, a:lines)
 endfunction
@@ -88,12 +84,14 @@ function! JuliaFormatter#Launch()
                     \ })
         if s:job == 0
             call s:Echoerr('JuliaFormatter: Invalid arguments!')
+            let g:JuliaFormatter_server = 0
             return 0
         elseif s:job == -1
             call s:Echoerr('JuliaFormatter: ' . l:binpath .' not executable!')
+            let g:JuliaFormatter_server = 0
             return 0
         else
-            let g:JuliaFormatter_loaded = 1
+            let g:JuliaFormatter_server = 1
             return 1
         endif
     elseif has('job')
@@ -103,13 +101,15 @@ function! JuliaFormatter#Launch()
                     \ })
         if job_status(s:job) !=# 'run'
             call s:Echoerr('JuliaFormatter: job failed to start or died!')
+            let g:JuliaFormatter_server = 0
             return 0
         else
-            let g:JuliaFormatter_loaded = 1
+            let g:JuliaFormatter_server = 1
             return 1
         endif
     else
         echoerr 'Not supported: not nvim nor vim with +job.'
+        let g:JuliaFormatter_server = 0
         return 0
     endif
 endfunction
@@ -134,6 +134,7 @@ function! JuliaFormatter#CheckJobId()
                     \ }))
         return 1
     catch
+        let g:JuliaFormatter_server = 0
         call s:Echoerr("JuliaFormatter seems to have crashed. Check logs for more information. Restarting ...")
         call JuliaFormatter#Launch()
         return 1
@@ -152,7 +153,7 @@ endfunction
 
 " JuliaFormatter#Format
 function! JuliaFormatter#Format(m)
-    if !get(g:, 'JuliaFormatter_loaded')
+    if !get(g:, 'JuliaFormatter_server')
         call JuliaFormatter#Launch()
     end
     " visual mode == 1
@@ -173,6 +174,7 @@ function! JuliaFormatter#Format(m)
     return JuliaFormatter#Send('format', {
         \ 'text': l:content,
         \ 'options': g:JuliaFormatter_options,
+        \ 'filepath': expand('%:p'),
         \ })
 endfunction
 
@@ -186,7 +188,7 @@ function! JuliaFormatter#FormatCommand(line1, count, range, mods, arg, args) abo
       let s:delete_last_line = v:false
   endif
   try
-    if !get(g:, 'JuliaFormatter_loaded')
+    if !get(g:, 'JuliaFormatter_server')
         call JuliaFormatter#Launch()
     end
     let l:content = getline(s:line_start, s:line_end)

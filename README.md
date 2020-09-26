@@ -113,8 +113,6 @@ Here is how to configure (n)vim for `BlueStyle` or `YAS`:
    JuliaFormatter.format_text(vim_text_selection_or_buffer, style = style)
    ```
 
-
-
 3. (_Optional_) Create a file in the path `~/.vim/after/ftplugin/julia.vim` and add to the julia.vim file the following:
 
    ```vim
