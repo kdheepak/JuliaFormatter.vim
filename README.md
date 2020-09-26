@@ -93,7 +93,7 @@ This translates to a call to:
 
 ```julia
 style = BlueStyle()
-JuliaFormatter.format_text(vim_text_selection_or_buffer, style)
+JuliaFormatter.format_text(vim_text_selection_or_buffer, style = style)
 ```
 
 3. Create a file in the path `~/.vim/after/ftplugin/julia.vim` and add to the julia.vim file the following:
