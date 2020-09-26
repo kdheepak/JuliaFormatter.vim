@@ -5,8 +5,23 @@ set cpoptions&vim
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let s:is_win = has('win32') || has('win64')
+if !exists("g:os")
+    if has("win64") || has("win32") || has("win16")
+        let g:os = "Windows"
+    else
+        let g:os = substitute(system('uname'), '\n', '', '')
+    endif
+endif
+
 let s:root = expand('<sfile>:h:h')
+
+if g:os ==# "Darwin"
+    let s:ext = ".dylib"
+elseif g:os ==# "Windows"
+    let s:ext = ".dll"
+else
+    let s:ext = ".so"
+endif
 
 if !exists("g:JuliaFormatter_options")
     let g:JuliaFormatter_options = {
@@ -16,6 +31,10 @@ if !exists("g:JuliaFormatter_options")
         \ 'whitespace_typedefs'       : v:false,
         \ 'whitespace_ops_in_indices' : v:true,
         \ }
+endif
+
+if !exists("g:JuliaFormatter_sysimage_path")
+    let g:JuliaFormatter_sysimage_path = s:root . '/scripts/juliaformatter' . s:ext
 endif
 
 command! -range=% -nargs=* JuliaFormatterFormat call JuliaFormatter#FormatCommand(
