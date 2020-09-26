@@ -133,19 +133,7 @@ See <https://domluna.github.io/JuliaFormatter.jl/stable/config/> for more inform
 
 Using a custom system image can speedup the initialization time of the plugin.
 This can be done using
-[`PackageCompiler`](https://github.com/JuliaLang/PackageCompiler.jl). There are
-[drawbacks](https://julialang.github.io/PackageCompiler.jl/dev/sysimages/#Drawbacks-to-custom-sysimages-1)
-of using `PackageCompiler`:
-
-> It should be clearly stated that there are some drawbacks to using a custom
-> sysimage, thereby sidestepping the standard Julia package precompilation
-> system. The biggest drawback is that packages that are compiled into a
-> sysimage (including their dependencies!) are "locked" to the version they
-> where at when the sysimage was created. This means that no matter what package
-> version you have installed in your current project, the one in the sysimage
-> will take precedence. This can lead to bugs where you start with a project
-> that needs a specific version of a package, but you have another one compiled
-> into the sysimage.
+[`PackageCompiler`](https://github.com/JuliaLang/PackageCompiler.jl).
 
 `PackageCompiler` can be used with `JuliaFormatter.vim` by running the following:
 
@@ -155,11 +143,19 @@ $ julia --project scripts/packagecompiler.jl
 ```
 
 You can type `:echo g:JuliaFormatter_root` to find where `/path/to/JuliaFormatter.vim/` is. For more information check vim documentation or consult your plugin manager documentation.
+This will create a Julia `sysimage` that is stored in `scripts` folder.
 
 Then in your `vimrc` set:
 
 ```vim
 let g:JuliaFormatter_use_sysimage=1
+```
+
+If you would like to use a sysimage that is located elsewhere, you can do so:
+
+```
+let g:JuliaFormatter_use_sysimage=1
+let g:JuliaFormatter_sysimage_path="/path/to/julia_sysimage.so"
 ```
 
 ### Troubleshooting
