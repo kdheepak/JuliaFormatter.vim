@@ -14,7 +14,22 @@ function log(msg; spacer = " ")
     flush(logfile)
 end
 
-format_options = Dict{Symbol, Any}()
+const CONFIG_FILE_NAME = JuliaFormatter.CONFIG_FILE_NAME
+
+function find_config_file(dir)
+    dir2config = Dict{String,Any}()
+    next_dir = dirname(dir)
+    config = if (next_dir == dir || # ensure to escape infinite recursion
+                 isempty(dir)) # reached to the system root
+        nothing
+    elseif haskey(dir2config, dir)
+        dir2config[dir]
+    else
+        path = joinpath(dir, CONFIG_FILE_NAME)
+        isfile(path) ? JuliaFormatter.parse_config(path) : find_config_file(next_dir)
+    end
+    return dir2config[dir] = config
+end
 
 function main()
     server_state = "start"
@@ -24,6 +39,7 @@ function main()
         data_lines = String(text)
         log("received text: $data_lines")
         for data in split(data_lines, '\n')
+            format_options = Dict{Symbol, Any}()
             try
                 data = JSON.parse(String(data))
             catch e
@@ -38,6 +54,7 @@ function main()
                 log("Setting up defaults ...")
                 text = data["params"]["text"]
                 options = data["params"]["options"]
+                filepath = data["params"]["filepath"]
                 style = pop!(options, "style", nothing)
                 style = if style == "blue"
                     BlueStyle()
@@ -52,7 +69,17 @@ function main()
                 for (k,v) in options
                     format_options[Symbol(k)] = v
                 end
-                log("Using options: $format_options with style: $style")
+                format_options[:style] = style
+                log("Searching for .JuliaFormatter.toml ...")
+                dir = dirname(filepath)
+                format_options = if (config = find_config_file(dir)) !== nothing
+                    log("Found .JuliaFormatter.toml with config: $config")
+                    merge(format_options, config)
+                else
+                    log("No .JuliaFormatter.toml")
+                    format_options
+                end
+                log("Using options: $format_options with style: $(format_options[:style])")
                 output = text
                 indent = typemax(Int64)
                 for line in text
@@ -61,19 +88,13 @@ function main()
                     end
                 end
                 log("Formatting: ")
-                log(join(text, "\n"), spacer = "\n")
-                try
-                    output = format_text(join(text, "\n"), style; format_options...)
-                    log("Success")
-                    data["status"] = "success"
-                catch e
-                    log("failed $e")
-                    output = join(text, "\n")
-                    data["status"] = "error"
-                end
+                # log(join(text, "\n"), spacer = "\n")
+                output = format_text(join(text, "\n"); format_options...)
+                log("Success")
+                data["status"] = "success"
                 log("\n---------------------------------------------------------------------\n")
                 log("Formatted: ")
-                log(output, spacer = "\n")
+                # log(output, spacer = "\n")
                 data["params"]["text"] =
                     [rstrip(lpad(l, length(l) + indent)) for l in split(output, "\n")]
                 println(stdout, JSON.json(data))
@@ -87,4 +108,10 @@ end
 
 log("calling main ...")
 
-main()
+try
+    main()
+catch e
+    iob = IOBuffer()
+    showerror(iob, e, catch_backtrace())
+    log(String(take!(iob)))
+end
