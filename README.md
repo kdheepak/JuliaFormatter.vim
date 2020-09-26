@@ -75,11 +75,11 @@ See full list of options over on the [JuliaFormatter API documentation](https://
 
 ### Compatibility with BlueStyle and YAS
 
-JuliaFormatter.vim enables compatibility with [BlueStyle](https://github.com/invenia/BlueStyle) and [YAS](https://github.com/jrevels/YASGuide).
+`JuliaFormatter.vim` enables compatibility with [BlueStyle](https://github.com/invenia/BlueStyle) and [YAS](https://github.com/jrevels/YASGuide).
 
 Here is how to configure (n)vim for `BlueStyle` or `YAS`:
 
-1. Install JuliaFormatter.vim
+1. Install [`JuliaFormatter.vim`](#install)
 
 2. Add the following to your vimrc to follow the `BlueStyle` standard:
 
