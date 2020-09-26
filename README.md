@@ -32,18 +32,20 @@ Open any Julia file, type `:` to open the command prompt and type the following:
 
 ```vim
 " format full file
-:call JuliaFormatter#Format(0)
+:JuliaFormatter
 " format last/current selection
-:call JuliaFormatter#Format(1)
+:'<,'>JuliaFormatterFormat
+" format from lines 5 to 15 inclusive
+:5,15JuliaFormatterFormat
 ```
 
 You can remap this to a keyboard shortcut as well.
 
 ```vim
 " normal mode mapping
-nnoremap <localleader>jf :<C-u>call JuliaFormatter#Format(0)<CR>
+nnoremap <localleader>jf :JuliaFormatterFormat<CR>
 " visual mode mapping
-vnoremap <localleader>jf :<C-u>call JuliaFormatter#Format(1)<CR>
+vnoremap <localleader>jf :JuliaFormatterFormat<CR>
 ```
 
 The (n)vim documentation recommends using `<localleader>` for a filetype plugin, but feel free to use `<leader>` or `<localleader>` for this remap.
