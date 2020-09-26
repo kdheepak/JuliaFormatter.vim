@@ -89,7 +89,7 @@ See full list of options over on the [JuliaFormatter API documentation](https://
 
 </details>
 
-### Compatibility with BlueStyle and YAS
+### Compatibility with `BlueStyle` and `YASStyle`
 
 <details>
 
