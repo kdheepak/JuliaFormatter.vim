@@ -9,5 +9,4 @@
 You can access the log file by running the following in vim:
 
 :JuliaFormatterLogFile
-
 -->
