@@ -4,7 +4,7 @@ Plugin for formatting Julia code in (n)vim using [`JuliaFormatter.jl`](https://g
 
 ![](https://user-images.githubusercontent.com/1813121/72941091-0b146300-3d68-11ea-9c95-75ec979caf6e.gif)
 
-### Install
+## Install
 
 Use any plugin manager:
 
@@ -26,7 +26,7 @@ call dein#add('kdheepak/JuliaFormatter.vim')
 Plugin 'kdheepak/JuliaFormatter.vim'
 ```
 
-### Usage
+## Usage
 
 Open any Julia file, type `:` to open the command prompt and type the following:
 
@@ -59,7 +59,13 @@ You can access the `JuliaFormatter` server log file by running the following:
 
 Feel free to open an issue for debugging a problem, questions or feature requests.
 
+## Options
+
 ### Setting Format Options
+
+<details>
+
+<summary> > Click to expand! </summary>
 
 To modify the formatting options can be modified by setting `g:JuliaFormatter_options` in your `vimrc`. An example of this is:
 
@@ -81,7 +87,13 @@ JuliaFormatter.format_text(vim_text_selection_or_buffer, indent = 4, margin = 92
 
 See full list of options over on the [JuliaFormatter API documentation](https://domluna.github.io/JuliaFormatter.jl/stable/api/#JuliaFormatter.format_file-Tuple{AbstractString}).
 
+</details>
+
 ### Compatibility with BlueStyle and YAS
+
+<details>
+
+<summary> > Click to expand! </summary>
 
 `JuliaFormatter.vim` enables compatibility with [BlueStyle](https://github.com/invenia/BlueStyle) and [YAS](https://github.com/jrevels/YASGuide).
 
@@ -130,14 +142,26 @@ Here is how to configure (n)vim for `BlueStyle` or `YAS`:
    setlocal colorcolumn+=1  " Highlight first column beyond the line limit.
    ```
 
+</details>
+
 ### Support `.JuliaFormatter.toml` configuration
+
+<details>
+
+<summary> > Click to expand! </summary>
 
 When `:JuliaFormatterFormat` is called, it will look for `.JuliaFormatter.toml` in the location of the file being formatted, and searching up the file tree until a config file is (or isn't) found.
 When found, the configurations in the file will overwrite the options provided by `g:JuliaFormatter_options`.
 
 See <https://domluna.github.io/JuliaFormatter.jl/stable/config/> for more information.
 
+</details>
+
 ### Precompiling `JuliaFormatter` using `PackageCompiler`
+
+<details>
+
+<summary> > Click to expand! </summary>
 
 Using a custom system image can speedup the initialization time of the plugin.
 This can be done using
@@ -168,7 +192,13 @@ let g:JuliaFormatter_use_sysimage=1
 let g:JuliaFormatter_sysimage_path="/path/to/julia_sysimage.so"
 ```
 
+</details>
+
 ### Launching the `JuliaFormatter` server when opening a Julia file
+
+<details>
+
+<summary> > Click to expand! </summary>
 
 By default, the `JuliaFormatter` server is only started the first time you call `:JuliaFormatterFormat`.
 This means your first format will be slower than the remaining times for an open session of (n)vim.
@@ -184,6 +214,14 @@ Just add the following in your `vimrc`:
 let g:JuliaFormatter_always_launch_server=1
 ```
 
+</details>
+
 ### Troubleshooting
 
+<details>
+
+<summary> > Click to expand! </summary>
+
 See [`MINRC`](./tests/MINRC) before opening an issue.
+
+</details>
