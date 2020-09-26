@@ -150,10 +150,11 @@ of using `PackageCompiler`:
 `PackageCompiler` can be used with `JuliaFormatter.vim` by running the following:
 
 ```
-$ julia --project /path/to/JuliaFormatter.vim/scripts/packagecompiler.jl
+$ cd /path/to/JuliaFormatter.vim/
+$ julia --project scripts/packagecompiler.jl
 ```
 
-You can type `:echo g:JuliaFormatter_root` to find where this folder is located. For more information check vim documentation or consult your plugin manager documentation.
+You can type `:echo g:JuliaFormatter_root` to find where `/path/to/JuliaFormatter.vim/` is. For more information check vim documentation or consult your plugin manager documentation.
 
 Then in your `vimrc` set:
 
