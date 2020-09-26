@@ -35,7 +35,7 @@ Open any Julia file, type `:` to open the command prompt and type the following:
 :JuliaFormatter
 " format last/current selection
 :'<,'>JuliaFormatterFormat
-" format from lines 5 to 15 inclusive
+" format from line 5 to line 15 inclusive
 :5,15JuliaFormatterFormat
 ```
 
