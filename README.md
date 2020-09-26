@@ -53,7 +53,7 @@ In (n)vim, both `<leader>` and `<localleader>` are set to the `\` key by default
 
 You can access the JuliaFormatter log file by running the following:
 
-```
+```vim
 :JuliaFormatterLog
 ```
 
