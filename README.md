@@ -73,30 +73,49 @@ JuliaFormatter.format_text(vim_text_selection_or_buffer, indent = 4, margin = 92
 
 See full list of options over on the [JuliaFormatter API documentation](https://domluna.github.io/JuliaFormatter.jl/stable/api/#JuliaFormatter.format_file-Tuple{AbstractString}).
 
-### Compatibility with BlueStyle
+### Compatibility with BlueStyle and YAS
 
-JuliaFormatter enables complete compatibility with [BlueStyle](https://github.com/invenia/BlueStyle).
+JuliaFormatter.vim enables compatibility with [BlueStyle](https://github.com/invenia/BlueStyle) and [YAS](https://github.com/jrevels/YASGuide).
 
-Here is how to configure (n)vim for BlueStyle:
+Here is how to configure (n)vim for `BlueStyle` or `YAS`:
 
 1. Install JuliaFormatter.vim
 
-2. Add the following to your vimrc to follow the BlueStyle standard:
+2. Add the following to your vimrc to follow the `BlueStyle` standard:
 
-```vim
-let g:JuliaFormatter_options = {
-        \ 'style' : 'blue',
-        \ }
-```
+   ```vim
+   let g:JuliaFormatter_options = {
+           \ 'style' : 'blue',
+           \ }
+   ```
 
-This translates to a call to:
+   This translates to a call to:
 
-```julia
-style = BlueStyle()
-JuliaFormatter.format_text(vim_text_selection_or_buffer, style = style)
-```
+   ```julia
+   style = BlueStyle()
+   JuliaFormatter.format_text(vim_text_selection_or_buffer, style = style)
+   ```
 
-3. Create a file in the path `~/.vim/after/ftplugin/julia.vim` and add to the julia.vim file the following:
+   OR
+
+   Add the following to your vimrc to follow the `BlueStyle` standard:
+
+   ```vim
+   let g:JuliaFormatter_options = {
+           \ 'style' : 'blue',
+           \ }
+   ```
+
+   This translates to a call to:
+
+   ```julia
+   style = YASStyle()
+   JuliaFormatter.format_text(vim_text_selection_or_buffer, style = style)
+   ```
+
+
+
+3. (_Optional_) Create a file in the path `~/.vim/after/ftplugin/julia.vim` and add to the julia.vim file the following:
 
 ```vim
 " ~/.vim/after/ftplugin/julia.vim
