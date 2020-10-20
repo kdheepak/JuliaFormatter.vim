@@ -32,7 +32,7 @@ Open any Julia file, type `:` to open the command prompt and type the following:
 
 ```vim
 " format full file
-:JuliaFormatter
+:JuliaFormatterFormat
 " format last/current selection
 :'<,'>JuliaFormatterFormat
 " format from line 5 to line 15 inclusive
