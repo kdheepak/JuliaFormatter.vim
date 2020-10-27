@@ -34,7 +34,6 @@ end
 function main()
     server_state = "start"
     while server_state != "quit"
-        log("waiting for stdin ... ")
         text = readavailable(stdin)
         data_lines = String(text)
         for data in split(data_lines, '\n')
