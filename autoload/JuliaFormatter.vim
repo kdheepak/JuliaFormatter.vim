@@ -73,6 +73,7 @@ function! JuliaFormatter#Launch()
     if !exists("g:JuliaFormatter_use_sysimage")
         let l:cmd = join([l:binpath,
               \ '--startup-file=no',
+              \ '--color=no',
               \ '--project=' . s:root,
               \ s:root . '/scripts/server.jl',
               \ ])
@@ -80,6 +81,7 @@ function! JuliaFormatter#Launch()
         let l:cmd = join([l:binpath,
               \ '-J' . g:JuliaFormatter_sysimage_path,
               \ '--startup-file=no',
+              \ '--color=no',
               \ '--project=' . s:root,
               \ s:root . '/scripts/server.jl',
               \ ])
