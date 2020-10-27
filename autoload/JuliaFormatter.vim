@@ -146,7 +146,7 @@ function! JuliaFormatter#CheckJobId()
         return 1
     catch
         let g:JuliaFormatter_server = 0
-        call s:Echoerr("JuliaFormatter seems to have crashed. Check logs for more information. Restarting ...")
+        call s:Echoerr("JuliaFormatter server seems to have crashed. " . v:exception . ". Check logs for more information. Restarting JuliaFormatter server ...")
         call JuliaFormatter#Launch()
         return 1
     endtry
