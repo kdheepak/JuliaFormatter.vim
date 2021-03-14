@@ -28,12 +28,14 @@ function! s:HandleMessage(job, lines, event)
             return
         endtry
         if get(l:message, 'status') ==# 'success'
+            let save_pos = getpos(".")
             let l:text = get(get(l:message, 'params'), 'text')
             call s:DeleteLines(s:line_start, s:line_end)
             call s:PutLines(l:text, s:line_start)
             if s:delete_last_line
                 execute "normal dd"
             endif
+            call setpos('.', save_pos)
             echomsg ""
         elseif get(l:message, 'status') ==# 'error'
             call s:Echoerr("ERROR: JuliaFormatter.jl could not parse text.")

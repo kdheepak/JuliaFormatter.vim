@@ -51,12 +51,12 @@ vnoremap <localleader>jf :JuliaFormatterFormat<CR>
 The (n)vim documentation recommends using `<localleader>` for a filetype plugin, but feel free to use `<leader>` or `<localleader>` for this remap.
 In (n)vim, both `<leader>` and `<localleader>` are set to the `\` key by default.
 
-If you wish to format the file on save, you can add the following to your `.vimrc` file:
+<!-- If you wish to format the file on save, you can add the following to your `.vimrc` file: -->
 
-```vim
-autocmd FileType julia
-    \ autocmd BufWrite <buffer> :JuliaFormatterFormat<CR>
-```
+<!-- ```vim -->
+<!-- autocmd FileType julia -->
+<!--     \ autocmd BufWriteCmd <buffer> :JuliaFormatterFormat<CR> -->
+<!-- ``` -->
 
 You can access the `JuliaFormatter` server log file by running the following:
 
