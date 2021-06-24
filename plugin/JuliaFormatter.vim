@@ -56,3 +56,5 @@ let &cpoptions = s:save_cpo
 unlet s:save_cpo
 
 let g:JuliaFormatter_loaded = 1
+
+autocmd VimLeavePre * call JuliaFormatter#Kill()

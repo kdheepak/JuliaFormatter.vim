@@ -81,6 +81,18 @@ function! JuliaFormatter#binaryPath()
     return l:filename
 endfunction
 
+function! JuliaFormatter#Kill()
+    if has('nvim')
+        if s:job>0
+            silent! call jobstop(s:job)
+        endif
+    else
+        if job_status(s:job)=='run'
+            call job_stop(s:job, 'kill')
+        endif
+    endif
+endfunction
+
 function! JuliaFormatter#Launch()
 
     call s:Echo("Launching stdio server ...")
