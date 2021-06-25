@@ -16,6 +16,7 @@ try
     Pkg.instantiate()
 catch
     log("Cannot Instantiate the project!")
+end
 
 const CONFIG_FILE_NAME = JuliaFormatter.CONFIG_FILE_NAME
 
