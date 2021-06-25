@@ -1,6 +1,3 @@
-using Pkg
-Pkg.instantiate()
-
 using JuliaFormatter
 using Dates
 using JSON
@@ -13,6 +10,12 @@ function log(msg; spacer = " ")
     write(logfile, "[$(Dates.now())]$spacer$msg\n")
     flush(logfile)
 end
+
+try
+    using Pkg
+    Pkg.instantiate()
+catch
+    log("Cannot Instantiate the project!")
 
 const CONFIG_FILE_NAME = JuliaFormatter.CONFIG_FILE_NAME
 
