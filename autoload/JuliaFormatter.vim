@@ -83,7 +83,7 @@ endfunction
 
 function! JuliaFormatter#Kill()
     if has('nvim')
-        if s:job>0
+        if s:job > 0
             silent! call jobstop(s:job)
         endif
     else
