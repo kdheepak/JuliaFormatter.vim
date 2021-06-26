@@ -1,3 +1,5 @@
+let s:job = 0
+
 function! s:PutLines(lines, lineStart)
     call append(a:lineStart - 1, a:lines)
 endfunction
@@ -120,7 +122,6 @@ function! JuliaFormatter#Launch()
               \ s:root . '/scripts/server.jl',
               \ ])
     endif
-
     if has('nvim')
         let s:job = jobstart(l:cmd, {
                     \ 'on_stdout': function('s:HandleMessage'),
