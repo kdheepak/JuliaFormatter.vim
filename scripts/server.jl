@@ -1,9 +1,4 @@
-using JuliaFormatter
 using Dates
-using JSON
-
-format_text("")
-
 const logfile = open(joinpath(@__DIR__, "juliaformatter.log"), "w")
 
 function log(msg; spacer = " ")
@@ -14,9 +9,17 @@ end
 try
     using Pkg
     Pkg.instantiate()
+
+    using JuliaFormatter
+    using JSON
 catch
-    log("Cannot Instantiate the project!")
+    log("Cannot Instantiate the project! Install dependencies by yourself: `julia --project=$(joinpath(@__DIR__, \"..\")) -e 'using Pkg; Pkg.add(\"JuliaFormatter\"); Pkg.add(\"JSON\")'`")
+    exit(1)
 end
+
+format_text("")
+
+
 
 const CONFIG_FILE_NAME = JuliaFormatter.CONFIG_FILE_NAME
 
