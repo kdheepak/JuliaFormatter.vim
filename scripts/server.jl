@@ -13,7 +13,8 @@ try
     using JuliaFormatter
     using JSON
 catch
-    log("Cannot Instantiate the project! Install dependencies by yourself: `julia --project=$(joinpath(@__DIR__, \"..\")) -e 'using Pkg; Pkg.add(\"JuliaFormatter\"); Pkg.add(\"JSON\")'`")
+    project_path = joinpath(@__DIR__, "..")
+    log("Cannot Instantiate the project! Install dependencies by yourself: `julia --project=$project_path -e 'using Pkg; Pkg.add(\"JuliaFormatter\"); Pkg.add(\"JSON\")'`")
     exit(1)
 end
 
