@@ -151,7 +151,7 @@ function! JuliaFormatter#Launch()
             let g:JuliaFormatter_server = 0
             return 0
         else
-            call s:Echo('JuliaFormatter: started with command ' . l:cmd)
+            " call s:Echo('JuliaFormatter: started with command ' . l:cmd)
             let g:JuliaFormatter_server = 1
             return 1
         endif
