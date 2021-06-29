@@ -87,10 +87,12 @@ function! JuliaFormatter#Kill()
     if has('nvim')
         if s:job > 0
             silent! call jobstop(s:job)
+            let s:job = 0
         endif
     else
-        if job_status(s:job)=='run'
+        if s:job != 0 && job_status(s:job)=='run'
             call job_stop(s:job, 'kill')
+            let s:job = 0
         endif
     endif
 endfunction
