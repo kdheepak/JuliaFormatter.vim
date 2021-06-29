@@ -10,4 +10,8 @@
 You can access the log file by running the following in vim:
 
 :JuliaFormatterLog
+
+Also paste the output of the following command in vim:
+
+:JuliaFormatterEchoCmd
 -->

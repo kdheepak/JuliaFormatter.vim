@@ -1,4 +1,29 @@
+let s:root = expand('<sfile>:p:h:h')
+
 let s:job = 0
+let s:filename = 'julia'
+
+if has('win32')
+    let s:filename .= '.exe'
+endif
+
+let s:binpath = s:filename
+if !exists("g:JuliaFormatter_use_sysimage")
+    let s:cmd = join([s:binpath,
+          \ '--startup-file=no',
+          \ '--color=no',
+          \ '--project=' . s:root,
+          \ s:root . '/scripts/server.jl',
+          \ ])
+else
+    let s:cmd = join([s:binpath,
+          \ '-J' . g:JuliaFormatter_sysimage_path,
+          \ '--startup-file=no',
+          \ '--color=no',
+          \ '--project=' . s:root,
+          \ s:root . '/scripts/server.jl',
+          \ ])
+endif
 
 function! s:PutLines(lines, lineStart)
     call append(a:lineStart - 1, a:lines)
@@ -73,14 +98,12 @@ function! s:HandleVim(job, data)
     return s:HandleMessage(a:job, [ch_readraw(a:job), a:data], 'stdout')
 endfunction
 
-let s:root = expand('<sfile>:p:h:h')
-
 function! JuliaFormatter#binaryPath()
-    let l:filename = 'julia'
+    let s:filename = 'julia'
     if has('win32')
-        let l:filename .= '.exe'
+        let s:filename .= '.exe'
     endif
-    return l:filename
+    return s:filename
 endfunction
 
 function! JuliaFormatter#Kill()
@@ -97,26 +120,26 @@ function! JuliaFormatter#Kill()
     endif
 endfunction
 
+function! JuliaFormatter#EchoCmd()
+  call s:Echo(s:cmd)
+endfunction
+
 function! JuliaFormatter#Launch()
 
-    call s:Echo("Launching stdio server ...")
-
-    let l:binpath = JuliaFormatter#binaryPath()
-
-    if executable(l:binpath) != 1
-        call s:Echoerr('JuliaFormatter: binary (' . l:binpath . ') doesn''t exists! Please check installation guide.')
+    if executable(s:binpath) != 1
+        call s:Echoerr('binary (' . s:binpath . ') doesn''t exists! Please check installation guide.')
         return 0
     endif
 
     if !exists("g:JuliaFormatter_use_sysimage")
-        let l:cmd = join([l:binpath,
+        let s:cmd = join([s:binpath,
               \ '--startup-file=no',
               \ '--color=no',
               \ '--project=' . s:root,
               \ s:root . '/scripts/server.jl',
               \ ])
     else
-        let l:cmd = join([l:binpath,
+        let s:cmd = join([s:binpath,
               \ '-J' . g:JuliaFormatter_sysimage_path,
               \ '--startup-file=no',
               \ '--color=no',
@@ -125,35 +148,35 @@ function! JuliaFormatter#Launch()
               \ ])
     endif
     if has('nvim')
-        let s:job = jobstart(l:cmd, {
+        let s:job = jobstart(s:cmd, {
                     \ 'on_stdout': function('s:HandleMessage'),
                     \ 'on_stderr': function('s:HandleMessage'),
                     \ 'on_exit': function('s:HandleMessage'),
                     \ })
         if s:job == 0
-            call s:Echoerr('JuliaFormatter: Invalid arguments!')
+            call s:Echoerr('Invalid arguments!')
             let g:JuliaFormatter_server = 0
             return 0
         elseif s:job == -1
-            call s:Echoerr('JuliaFormatter: ' . l:binpath .' not executable!')
+            call s:Echoerr(s:binpath .' not executable!')
             let g:JuliaFormatter_server = 0
             return 0
         else
-            " call s:Echo('JuliaFormatter: started with command ' . l:cmd)
+            call s:Echo('started JuliaFormatter server (see :JuliaFormatterEchoCmd for more info)')
             let g:JuliaFormatter_server = 1
             return 1
         endif
     elseif has('job')
         " FIXME: stdout callback should fire after job finishes
-        let s:job = job_start(l:cmd, {
+        let s:job = job_start(s:cmd, {
                     \ "out_cb": function('s:HandleVim'),
                     \ })
         if job_status(s:job) !=# 'run'
-            call s:Echoerr('JuliaFormatter: job failed to start or died!')
+            call s:Echoerr('job failed to start or died!')
             let g:JuliaFormatter_server = 0
             return 0
         else
-            " call s:Echo('JuliaFormatter: started with command ' . l:cmd)
+            call s:Echo('started JuliaFormatter server (see :JuliaFormatterEchoCmd)' . s:cmd)
             let g:JuliaFormatter_server = 1
             return 1
         endif

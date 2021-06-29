@@ -58,13 +58,19 @@ In (n)vim, both `<leader>` and `<localleader>` are set to the `\` key by default
 <!--     \ autocmd BufWriteCmd <buffer> :JuliaFormatterFormat<CR> -->
 <!-- ``` -->
 
+Feel free to open an issue for debugging a problem, questions or feature requests.
+
+For debugging, the following is useful to check.
+
+```vim
+:JuliaFormatterEchoCmd
+```
+
 You can access the `JuliaFormatter` server log file by running the following:
 
 ```vim
 :JuliaFormatterLog
 ```
-
-Feel free to open an issue for debugging a problem, questions or feature requests.
 
 ## Options
 
