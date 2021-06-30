@@ -231,6 +231,8 @@ let g:JuliaFormatter_always_launch_server=1
 
 ### Neovim built in LSP formatting using efm
 
+See https://github.com/mattn/efm-langserver
+
 ```
 require"lspconfig".efm.setup {
     init_options = {documentFormatting = true},
