@@ -229,6 +229,21 @@ let g:JuliaFormatter_always_launch_server=1
 
 </details>
 
+### Neovim built in LSP formatting using efm
+
+```
+require"lspconfig".efm.setup {
+    init_options = {documentFormatting = true},
+    filetypes = {"julia"},
+    settings = {
+        rootMarkers = {".git/"},
+        languages = {
+            julia = {require("juliaformatter").efmConfig}
+        }
+    }
+}
+```
+
 ### Troubleshooting
 
 <details>
