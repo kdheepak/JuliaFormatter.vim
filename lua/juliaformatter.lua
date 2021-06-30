@@ -20,7 +20,7 @@ end
 local sysimage_path = juliaformatter_project .. 'scripts/juliaformatter' .. ext
 if vim.fn.filereadable(vim.fn.expand(sysimage_path)) then
     juliaformatter_sysimage = sysimage_path
-    -- formatCommand = formatCommand .. '-J ' .. juliaformatter_sysimage .. ' '
+    formatCommand = formatCommand .. '--sysimage=' .. juliaformatter_sysimage .. ' '
 end
 
 formatCommand = formatCommand .. '--project=' .. juliaformatter_project
