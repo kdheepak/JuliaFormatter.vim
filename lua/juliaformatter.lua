@@ -1,5 +1,5 @@
 local juliaformatter_sysimage = ""
-local juliaformatter_project = vim.fn.expand('<sfile>:p')
+local juliaformatter_project = vim.fn.expand('<sfile>:p:h')
 local formatCommand = 'julia '
 
 if vim.fn.has("win64") ~= 0 or vim.fn.has("win32") ~= 0 or vim.fn.has("win16") ~= 0 then
