@@ -229,9 +229,9 @@ let g:JuliaFormatter_always_launch_server=1
 
 </details>
 
-### Neovim built in LSP formatting using efm
+### Format on save using neovim built in LSP formatting
 
-See https://github.com/mattn/efm-langserver
+You'll need https://github.com/mattn/efm-langserver. Add the following to your `.vimrc`:
 
 ```
 require"lspconfig".efm.setup {
@@ -244,6 +244,12 @@ require"lspconfig".efm.setup {
         }
     }
 }
+```
+
+Then you can this to `ftplugin/julia.vim`:
+
+```
+autocmd BufWritePre *.jl lua vim.lsp.buf.formatting_sync()
 ```
 
 ### Troubleshooting
