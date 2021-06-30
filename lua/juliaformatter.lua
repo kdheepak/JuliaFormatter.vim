@@ -1,6 +1,12 @@
 local juliaformatter_sysimage = ""
-local juliaformatter_project = vim.fn.expand("%:p:h")
+local juliaformatter_project = vim.fn.expand('<sfile>:p')
 local formatCommand = 'julia '
+
+if vim.fn.has("win64") ~= 0 or vim.fn.has("win32") ~= 0 or vim.fn.has("win16") ~= 0 then
+    vim.g.os = "Windows"
+else
+    vim.g.os = vim.fn.substitute(vim.fn.system('uname'), '\n', '', '')
+end
 
 local ext = ""
 if vim.g.os == "Darwin" then
@@ -18,6 +24,6 @@ if vim.fn.filereadable(vim.fn.expand(sysimage_path)) then
 end
 
 formatCommand = formatCommand .. '--project ' .. juliaformatter_project
-                    .. [[ startup-file=no color=no -e 'using JuliaFormatter print(format_text(String(read(stdin))))']]
+                    .. [[ startup-file=no color=no -e 'using JuliaFormatter; print(format_text(String(read(stdin))))']]
 
 return {efmConfig = {formatCommand = formatCommand, formatStdin = true}}
