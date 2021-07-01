@@ -233,7 +233,7 @@ let g:JuliaFormatter_always_launch_server=1
 
 You'll need https://github.com/mattn/efm-langserver. Add the following to your `.vimrc`:
 
-```
+```lua
 require"lspconfig".efm.setup {
     init_options = {documentFormatting = true},
     filetypes = {"julia"},
@@ -248,8 +248,16 @@ require"lspconfig".efm.setup {
 
 Then you can this to `ftplugin/julia.vim`:
 
-```
+```vim
 autocmd BufWritePre *.jl lua vim.lsp.buf.formatting_sync()
+```
+
+This works best if you have and use `PackageCompiler` to compile `JuliaFormatter` into a sysimage.
+
+You can run the following to see what process is executed on the command line to format your code:
+
+```vim
+:lua require("juliaformatter").efmConfig
 ```
 
 ### Troubleshooting
