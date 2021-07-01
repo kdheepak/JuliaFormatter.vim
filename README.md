@@ -257,7 +257,7 @@ This works best if you have and use `PackageCompiler` to compile `JuliaFormatter
 You can run the following to see what process is executed on the command line to format your code:
 
 ```vim
-:lua require("juliaformatter").efmConfig
+:lua print(require("juliaformatter").efmConfig)
 ```
 
 ### Troubleshooting
