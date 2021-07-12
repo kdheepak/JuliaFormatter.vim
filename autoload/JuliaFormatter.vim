@@ -176,7 +176,9 @@ function! JuliaFormatter#Launch()
             let g:JuliaFormatter_server = 0
             return 0
         else
-            call s:Echo('started stdio server (see :JuliaFormatterEchoCmd for more info)')
+            if g:JuliaFormatter_always_launch_server != 1
+                call s:Echo('started stdio server (see :JuliaFormatterEchoCmd for more info)')
+            endif
             let g:JuliaFormatter_server = 1
             return 1
         endif
