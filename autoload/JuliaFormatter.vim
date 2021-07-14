@@ -167,8 +167,8 @@ function! JuliaFormatter#Launch()
             let g:JuliaFormatter_server = 0
             return 0
         else
-            if g:JuliaFormatter_always_launch_server != 1
-                call s:Echo('started stdio server (see :JuliaFormatterEchoCmd for more info)')
+            if get(g:, 'JuliaFormatter_always_launch_server') != 1
+                call s:Echo('started stdio server (see :JuliaFormatterEchoCmd)')
             endif
             let g:JuliaFormatter_server = 1
             return 1
@@ -183,8 +183,8 @@ function! JuliaFormatter#Launch()
             let g:JuliaFormatter_server = 0
             return 0
         else
-            if g:JuliaFormatter_always_launch_server != 1
-                call s:Echo('started stdio server (see :JuliaFormatterEchoCmd for more info)')
+            if get(g:, 'JuliaFormatter_always_launch_server') != 1
+                call s:Echo('started stdio server (see :JuliaFormatterEchoCmd)')
             endif
             let g:JuliaFormatter_server = 1
             return 1
