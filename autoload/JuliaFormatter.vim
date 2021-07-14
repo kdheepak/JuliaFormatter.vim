@@ -112,9 +112,14 @@ function! JuliaFormatter#Kill()
             silent! call jobstop(s:job)
             let s:job = 0
         endif
-    else
-        if s:job != 0 && job_status(s:job)=='run'
-            call job_stop(s:job, 'kill')
+    elseif v:version > 704 || v:version == 704 && has('patch1967')
+        if s:job is v:t_job  && job_status(s:job)=='run'
+            silent! call job_stop(job_id)
+            let s:job = 0
+        endif
+    elseif has('patch-8.0.902')
+        if type(s:job) != type(0) && job_status(s:job)=='run'
+            silent! call job_stop(s:job, 'kill')
             let s:job = 0
         endif
     endif
