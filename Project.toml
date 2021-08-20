@@ -2,3 +2,9 @@
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
 JuliaFormatter = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
 PackageCompiler = "9b87118b-4619-50d2-8e1e-99f35a4d4d9d"
+
+[compat]
+JSON = "0.21"
+JuliaFormatter = "0.15"
+PackageCompiler = "1"
+julia = "1"
