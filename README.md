@@ -72,6 +72,12 @@ You can access the `JuliaFormatter` server log file by running the following:
 :JuliaFormatterLog
 ```
 
+Finally, you can run `JuliaFormatterUpdate` to run `julia --project=/path/to/vim_plugin/ -e "using Pkg; Pkg.update()"`
+
+```vim
+:JuliaFormatterUpdate
+```
+
 ## Options
 
 ### Setting Format Options

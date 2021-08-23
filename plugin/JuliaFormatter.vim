@@ -52,6 +52,8 @@ command! -range=% -nargs=* JuliaFormatterFormat call JuliaFormatter#FormatComman
 
 command! JuliaFormatterEchoCmd call JuliaFormatter#EchoCmd()
 
+command! JuliaFormatterUpdate call JuliaFormatter#Update()
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let &cpoptions = s:save_cpo

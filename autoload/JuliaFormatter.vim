@@ -281,3 +281,22 @@ function! JuliaFormatter#FormatCommand(line1, count, range, mods, arg, args) abo
         \ })
   endtry
 endfunction
+
+function! JuliaFormatter#Update()
+
+    if executable(s:binpath) != 1
+        call s:Echoerr('binary (' . s:binpath . ') doesn''t exists! Please check installation guide.')
+        return 0
+    endif
+
+    let s:cmd = join([s:binpath,
+            \ '--startup-file=no',
+            \ '--color=no',
+            \ '--project=' . s:root,
+            \ '-e',
+            \ '"using Pkg; Pkg.update()"',
+            \ ])
+
+    call system(s:cmd)
+
+endfunction
