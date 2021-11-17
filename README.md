@@ -4,6 +4,8 @@ Plugin for formatting Julia code in (n)vim using [`JuliaFormatter.jl`](https://g
 
 ![](https://user-images.githubusercontent.com/1813121/72941091-0b146300-3d68-11ea-9c95-75ec979caf6e.gif)
 
+Note: [LanguageServer.jl](https://github.com/julia-vscode/LanguageServer.jl) now supports `JuliaFormatter.jl`, so you may not want to use this if you already are using `lsp` with `vim`/`neovim`.
+
 ## Install
 
 Use any plugin manager:
