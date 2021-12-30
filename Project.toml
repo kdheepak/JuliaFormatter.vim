@@ -5,6 +5,6 @@ PackageCompiler = "9b87118b-4619-50d2-8e1e-99f35a4d4d9d"
 
 [compat]
 JSON = "0.21"
-JuliaFormatter = "0.17"
+JuliaFormatter = "0.21"
 PackageCompiler = "1"
 julia = "1"
