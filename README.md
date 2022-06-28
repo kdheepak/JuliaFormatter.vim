@@ -80,6 +80,11 @@ Finally, you can run `JuliaFormatterUpdate` to run `julia --project=/path/to/vim
 :JuliaFormatterUpdate
 ```
 
+Note that this repository does not have any `compat` ranges for `JuliaFormatter.jl` or `PackageCompiler.jl`.
+This will result in the latest version of `JuliaFormatter.jl` and `PackageCompiler.jl` being installed.
+If this plugin doesn't work with the latest versions of these packages, please open an issue.
+Older versions are supported on a best effort basis.
+
 ## Options
 
 ### Setting Format Options
