@@ -84,6 +84,9 @@ function! s:HandleMessage(job, lines, event)
                 noa w " Save again without triggering autocmd
             endif
             echomsg ""
+            if has('nvim')
+                call v:lua.vim.notify("Formatted", "info", {'title': 'juliaformatter.vim'})
+            endif
         elseif get(l:message, 'status') ==# 'error'
             call s:Echoerr("ERROR: JuliaFormatter.jl could not parse text.")
         endif
@@ -108,6 +111,7 @@ endfunction
 
 function! JuliaFormatter#Kill()
     if has('nvim')
+        call v:lua.vim.notify("Killing job", "info", {'title': 'juliaformatter.vim'})
         if s:job > 0
             silent! call jobstop(s:job)
             let s:job = 0
@@ -153,6 +157,7 @@ function! JuliaFormatter#Launch()
               \ ])
     endif
     if has('nvim')
+        call v:lua.vim.notify("Starting job", "info", {'title': 'juliaformatter.vim'})
         let s:job = jobstart(s:cmd, {
                     \ 'on_stdout': function('s:HandleMessage'),
                     \ 'on_stderr': function('s:HandleMessage'),
