@@ -25,7 +25,27 @@ else
           \ ])
 endif
 
+function! s:goto_win(winnr, ...) abort
+    let cmd = type(a:winnr) == type(0) ? a:winnr . 'wincmd w'
+                                     \ : 'wincmd ' . a:winnr
+    let noauto = a:0 > 0 ? a:1 : 0
+
+    if noauto
+        noautocmd execute cmd
+    else
+        execute cmd
+    endif
+endfunction
+
+function! s:goto_buf(bufnr, ...) abort
+    execute ":b " . a:bufnr
+endfunction
+
 function! s:ReplaceLines(start, end, lines) abort
+    let save_cursor = getpos(".")
+    call s:goto_win(bufwinnr(g:current_buffer_name))
+    call s:goto_buf(g:current_buffer_number)
+
     call s:DeleteLines(a:start, a:end)
     call append(a:start - 1, a:lines)
 endfunction
@@ -247,6 +267,8 @@ function! JuliaFormatter#Format(m)
     if !get(g:, 'JuliaFormatter_server')
         call JuliaFormatter#Launch()
     end
+    let g:current_buffer_name = bufname('%')
+    let g:current_buffer_number = bufnr('%')
     " visual mode == 1
     if a:m == 1
         let s:line_start = getpos("'<")[1]
@@ -271,6 +293,8 @@ endfunction
 
 
 function! JuliaFormatter#FormatCommand(line1, count, range, mods, arg, args) abort
+  let g:current_buffer_name = bufname('%')
+  let g:current_buffer_number = bufnr('%')
   let s:line_start = a:count > 0 ? a:line1 : 1
   let s:line_end = a:count > 0 ? a:count : line('$')
   if s:line_start ==# 1 && s:line_end ==# line('$')
