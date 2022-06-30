@@ -25,12 +25,17 @@ else
           \ ])
 endif
 
-function! s:PutLines(lines, lineStart)
-    call append(a:lineStart - 1, a:lines)
+function! s:ReplaceLines(start, end, lines) abort
+    call s:DeleteLines(a:start, a:end)
+    call append(a:start - 1, a:lines)
 endfunction
 
-function! s:DeleteLines(lineFirst, lineLast)
-    silent! exec a:lineFirst . "," . a:lineLast ."d _"
+function! s:DeleteLines(lineFirst, lineLast) abort
+    if exists('*deletebufline')
+        call deletebufline('%', a:lineFirst, a:lineLast)
+    else
+        silent! exec a:lineFirst . ',' . a:lineLast . 'delete _'
+    endif
 endfunction
 
 function! s:AddPrefix(message)
@@ -67,8 +72,7 @@ function! s:HandleMessage(job, lines, event)
             let l:isdirty = &modified
 
             let l:text = get(get(l:message, 'params'), 'text')
-            call s:DeleteLines(s:line_start, s:line_end)
-            call s:PutLines(l:text, s:line_start)
+            call s:ReplaceLines(s:line_start, s:line_end, l:text)
             if s:delete_last_line
                 execute "normal dd"
             endif
