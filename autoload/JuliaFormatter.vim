@@ -1,8 +1,12 @@
 let s:root = expand('<sfile>:p:h:h')
 
 let s:job = 0
-let s:filename = 'julia'
 
+if exists("g:JuliaFormatter_julia_path")
+    let s:filename = g:JuliaFormatter_julia_path
+else
+    let s:filename = 'julia'
+endif
 if has('win32')
     let s:filename .= '.exe'
 endif
@@ -123,14 +127,6 @@ endfunction
 
 function! s:HandleVim(job, data)
     return s:HandleMessage(a:job, [ch_readraw(a:job), a:data], 'stdout')
-endfunction
-
-function! JuliaFormatter#binaryPath()
-    let s:filename = 'julia'
-    if has('win32')
-        let s:filename .= '.exe'
-    endif
-    return s:filename
 endfunction
 
 function! JuliaFormatter#Kill()
