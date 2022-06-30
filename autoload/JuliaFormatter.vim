@@ -25,12 +25,37 @@ else
           \ ])
 endif
 
-function! s:PutLines(lines, lineStart)
-    call append(a:lineStart - 1, a:lines)
+function! s:goto_win(winnr, ...) abort
+    let cmd = type(a:winnr) == type(0) ? a:winnr . 'wincmd w'
+                                     \ : 'wincmd ' . a:winnr
+    let noauto = a:0 > 0 ? a:1 : 0
+
+    if noauto
+        noautocmd execute cmd
+    else
+        execute cmd
+    endif
 endfunction
 
-function! s:DeleteLines(lineFirst, lineLast)
-    silent! exec a:lineFirst . "," . a:lineLast ."d _"
+function! s:goto_buf(bufnr, ...) abort
+    execute ":b " . a:bufnr
+endfunction
+
+function! s:ReplaceLines(start, end, lines) abort
+    let save_cursor = getpos(".")
+    call s:goto_win(bufwinnr(g:current_buffer_name))
+    call s:goto_buf(g:current_buffer_number)
+
+    call s:DeleteLines(a:start, a:end)
+    call append(a:start - 1, a:lines)
+endfunction
+
+function! s:DeleteLines(lineFirst, lineLast) abort
+    if exists('*deletebufline')
+        call deletebufline('%', a:lineFirst, a:lineLast)
+    else
+        silent! exec a:lineFirst . ',' . a:lineLast . 'delete _'
+    endif
 endfunction
 
 function! s:AddPrefix(message)
@@ -67,8 +92,7 @@ function! s:HandleMessage(job, lines, event)
             let l:isdirty = &modified
 
             let l:text = get(get(l:message, 'params'), 'text')
-            call s:DeleteLines(s:line_start, s:line_end)
-            call s:PutLines(l:text, s:line_start)
+            call s:ReplaceLines(s:line_start, s:line_end, l:text)
             if s:delete_last_line
                 execute "normal dd"
             endif
@@ -84,6 +108,9 @@ function! s:HandleMessage(job, lines, event)
                 noa w " Save again without triggering autocmd
             endif
             echomsg ""
+            if has('nvim')
+                call v:lua.vim.notify("Formatted", "info", {'title': 'juliaformatter.vim'})
+            endif
         elseif get(l:message, 'status') ==# 'error'
             call s:Echoerr("ERROR: JuliaFormatter.jl could not parse text.")
         endif
@@ -108,6 +135,7 @@ endfunction
 
 function! JuliaFormatter#Kill()
     if has('nvim')
+        call v:lua.vim.notify("Killing job", "info", {'title': 'juliaformatter.vim'})
         if s:job > 0
             silent! call jobstop(s:job)
             let s:job = 0
@@ -153,6 +181,7 @@ function! JuliaFormatter#Launch()
               \ ])
     endif
     if has('nvim')
+        call v:lua.vim.notify("Starting job", "info", {'title': 'juliaformatter.vim'})
         let s:job = jobstart(s:cmd, {
                     \ 'on_stdout': function('s:HandleMessage'),
                     \ 'on_stderr': function('s:HandleMessage'),
@@ -238,6 +267,8 @@ function! JuliaFormatter#Format(m)
     if !get(g:, 'JuliaFormatter_server')
         call JuliaFormatter#Launch()
     end
+    let g:current_buffer_name = bufname('%')
+    let g:current_buffer_number = bufnr('%')
     " visual mode == 1
     if a:m == 1
         let s:line_start = getpos("'<")[1]
@@ -262,6 +293,8 @@ endfunction
 
 
 function! JuliaFormatter#FormatCommand(line1, count, range, mods, arg, args) abort
+  let g:current_buffer_name = bufname('%')
+  let g:current_buffer_number = bufnr('%')
   let s:line_start = a:count > 0 ? a:line1 : 1
   let s:line_end = a:count > 0 ? a:count : line('$')
   if s:line_start ==# 1 && s:line_end ==# line('$')
